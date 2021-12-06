@@ -1,0 +1,1147 @@
+{
+  "contractName": "ExchangeDomain",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/exchange/ExchangeDomain.sol\":\"ExchangeDomain\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/exchange/ExchangeDomain.sol\":{\"keccak256\":\"0x9f1222ff6c27ed318100fa74d001355140617898cc344675656611bf4fc9988e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://89e2a093e8211abd50affdc3e2b490848d16db7ad36eefa6ae2f15594aeca25d\",\"dweb:/ipfs/QmR4urfeuTn6a3MwGBbphFoLHzQ3NgtWMqj3C1kDv8wU9c\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212206a510b5b0d5ad02c8437b1bd9c7ca4f1dd07cde015e7252c70591cb57d94816c64736f6c634300080a0033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212206a510b5b0d5ad02c8437b1bd9c7ca4f1dd07cde015e7252c70591cb57d94816c64736f6c634300080a0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "101:914:1:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "101:914:1:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.9.0;\npragma experimental ABIEncoderV2;\n\n\ncontract ExchangeDomain {\n\n    enum AssetType {ETH, ERC20, ERC1155, ERC721, ERC721Deprecated}\n\n    struct Asset {\n        address token;\n        uint tokenId;\n        AssetType assetType;\n    }\n\n    struct OrderKey {\n        /* who signed the order */\n        address owner;\n        /* random number */\n        uint salt;\n\n        /* what has owner */\n        Asset sellAsset;\n\n        /* what wants owner */\n        Asset buyAsset;\n    }\n\n    struct Order {\n        OrderKey key;\n\n        /* how much has owner (in wei, or UINT256_MAX if ERC-721) */\n        uint selling;\n        /* how much wants owner (in wei, or UINT256_MAX if ERC-721) */\n        uint buying;\n\n        /* fee for selling */\n        uint sellerFee;\n    }\n\n    /* An ECDSA signature. */\n    struct Sig {\n        /* v parameter */\n        uint8 v;\n        /* r parameter */\n        bytes32 r;\n        /* s parameter */\n        bytes32 s;\n    }\n}\n",
+  "sourcePath": "/home/ec2-user/test-contract/contracts/exchange/ExchangeDomain.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/exchange/ExchangeDomain.sol",
+    "exportedSymbols": {
+      "ExchangeDomain": [
+        78
+      ]
+    },
+    "id": 79,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 34,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:1"
+      },
+      {
+        "id": 35,
+        "literals": [
+          "experimental",
+          "ABIEncoderV2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "65:33:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ExchangeDomain",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 78,
+        "linearizedBaseContracts": [
+          78
+        ],
+        "name": "ExchangeDomain",
+        "nameLocation": "110:14:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "ExchangeDomain.AssetType",
+            "id": 41,
+            "members": [
+              {
+                "id": 36,
+                "name": "ETH",
+                "nameLocation": "148:3:1",
+                "nodeType": "EnumValue",
+                "src": "148:3:1"
+              },
+              {
+                "id": 37,
+                "name": "ERC20",
+                "nameLocation": "153:5:1",
+                "nodeType": "EnumValue",
+                "src": "153:5:1"
+              },
+              {
+                "id": 38,
+                "name": "ERC1155",
+                "nameLocation": "160:7:1",
+                "nodeType": "EnumValue",
+                "src": "160:7:1"
+              },
+              {
+                "id": 39,
+                "name": "ERC721",
+                "nameLocation": "169:6:1",
+                "nodeType": "EnumValue",
+                "src": "169:6:1"
+              },
+              {
+                "id": 40,
+                "name": "ERC721Deprecated",
+                "nameLocation": "177:16:1",
+                "nodeType": "EnumValue",
+                "src": "177:16:1"
+              }
+            ],
+            "name": "AssetType",
+            "nameLocation": "137:9:1",
+            "nodeType": "EnumDefinition",
+            "src": "132:62:1"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Asset",
+            "id": 49,
+            "members": [
+              {
+                "constant": false,
+                "id": 43,
+                "mutability": "mutable",
+                "name": "token",
+                "nameLocation": "231:5:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "223:13:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 42,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 45,
+                "mutability": "mutable",
+                "name": "tokenId",
+                "nameLocation": "251:7:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "246:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 44,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "246:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 48,
+                "mutability": "mutable",
+                "name": "assetType",
+                "nameLocation": "278:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "268:19:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_AssetType_$41",
+                  "typeString": "enum ExchangeDomain.AssetType"
+                },
+                "typeName": {
+                  "id": 47,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 46,
+                    "name": "AssetType",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 41,
+                    "src": "268:9:1"
+                  },
+                  "referencedDeclaration": 41,
+                  "src": "268:9:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_AssetType_$41",
+                    "typeString": "enum ExchangeDomain.AssetType"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Asset",
+            "nameLocation": "207:5:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "200:94:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.OrderKey",
+            "id": 60,
+            "members": [
+              {
+                "constant": false,
+                "id": 51,
+                "mutability": "mutable",
+                "name": "owner",
+                "nameLocation": "369:5:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "361:13:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 50,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "361:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 53,
+                "mutability": "mutable",
+                "name": "salt",
+                "nameLocation": "417:4:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "412:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 52,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "412:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 56,
+                "mutability": "mutable",
+                "name": "sellAsset",
+                "nameLocation": "467:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "461:15:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                  "typeString": "struct ExchangeDomain.Asset"
+                },
+                "typeName": {
+                  "id": 55,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 54,
+                    "name": "Asset",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 49,
+                    "src": "461:5:1"
+                  },
+                  "referencedDeclaration": 49,
+                  "src": "461:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                    "typeString": "struct ExchangeDomain.Asset"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 59,
+                "mutability": "mutable",
+                "name": "buyAsset",
+                "nameLocation": "524:8:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "518:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                  "typeString": "struct ExchangeDomain.Asset"
+                },
+                "typeName": {
+                  "id": 58,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 57,
+                    "name": "Asset",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 49,
+                    "src": "518:5:1"
+                  },
+                  "referencedDeclaration": 49,
+                  "src": "518:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                    "typeString": "struct ExchangeDomain.Asset"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "OrderKey",
+            "nameLocation": "307:8:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "300:239:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Order",
+            "id": 70,
+            "members": [
+              {
+                "constant": false,
+                "id": 63,
+                "mutability": "mutable",
+                "name": "key",
+                "nameLocation": "577:3:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "568:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_OrderKey_$60_storage_ptr",
+                  "typeString": "struct ExchangeDomain.OrderKey"
+                },
+                "typeName": {
+                  "id": 62,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 61,
+                    "name": "OrderKey",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 60,
+                    "src": "568:8:1"
+                  },
+                  "referencedDeclaration": 60,
+                  "src": "568:8:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_OrderKey_$60_storage_ptr",
+                    "typeString": "struct ExchangeDomain.OrderKey"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 65,
+                "mutability": "mutable",
+                "name": "selling",
+                "nameLocation": "665:7:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "660:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 64,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "660:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 67,
+                "mutability": "mutable",
+                "name": "buying",
+                "nameLocation": "758:6:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "753:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 66,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "753:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 69,
+                "mutability": "mutable",
+                "name": "sellerFee",
+                "nameLocation": "810:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "805:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 68,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "805:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Order",
+            "nameLocation": "552:5:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "545:281:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Sig",
+            "id": 77,
+            "members": [
+              {
+                "constant": false,
+                "id": 72,
+                "mutability": "mutable",
+                "name": "v",
+                "nameLocation": "915:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "909:7:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint8",
+                  "typeString": "uint8"
+                },
+                "typeName": {
+                  "id": 71,
+                  "name": "uint8",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "909:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 74,
+                "mutability": "mutable",
+                "name": "r",
+                "nameLocation": "960:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "952:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                },
+                "typeName": {
+                  "id": 73,
+                  "name": "bytes32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "952:7:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 76,
+                "mutability": "mutable",
+                "name": "s",
+                "nameLocation": "1005:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "997:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                },
+                "typeName": {
+                  "id": 75,
+                  "name": "bytes32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "997:7:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Sig",
+            "nameLocation": "869:3:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "862:151:1",
+            "visibility": "public"
+          }
+        ],
+        "scope": 79,
+        "src": "101:914:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:984:1"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/exchange/ExchangeDomain.sol",
+    "exportedSymbols": {
+      "ExchangeDomain": [
+        78
+      ]
+    },
+    "id": 79,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 34,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:1"
+      },
+      {
+        "id": 35,
+        "literals": [
+          "experimental",
+          "ABIEncoderV2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "65:33:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ExchangeDomain",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 78,
+        "linearizedBaseContracts": [
+          78
+        ],
+        "name": "ExchangeDomain",
+        "nameLocation": "110:14:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "ExchangeDomain.AssetType",
+            "id": 41,
+            "members": [
+              {
+                "id": 36,
+                "name": "ETH",
+                "nameLocation": "148:3:1",
+                "nodeType": "EnumValue",
+                "src": "148:3:1"
+              },
+              {
+                "id": 37,
+                "name": "ERC20",
+                "nameLocation": "153:5:1",
+                "nodeType": "EnumValue",
+                "src": "153:5:1"
+              },
+              {
+                "id": 38,
+                "name": "ERC1155",
+                "nameLocation": "160:7:1",
+                "nodeType": "EnumValue",
+                "src": "160:7:1"
+              },
+              {
+                "id": 39,
+                "name": "ERC721",
+                "nameLocation": "169:6:1",
+                "nodeType": "EnumValue",
+                "src": "169:6:1"
+              },
+              {
+                "id": 40,
+                "name": "ERC721Deprecated",
+                "nameLocation": "177:16:1",
+                "nodeType": "EnumValue",
+                "src": "177:16:1"
+              }
+            ],
+            "name": "AssetType",
+            "nameLocation": "137:9:1",
+            "nodeType": "EnumDefinition",
+            "src": "132:62:1"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Asset",
+            "id": 49,
+            "members": [
+              {
+                "constant": false,
+                "id": 43,
+                "mutability": "mutable",
+                "name": "token",
+                "nameLocation": "231:5:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "223:13:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 42,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 45,
+                "mutability": "mutable",
+                "name": "tokenId",
+                "nameLocation": "251:7:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "246:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 44,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "246:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 48,
+                "mutability": "mutable",
+                "name": "assetType",
+                "nameLocation": "278:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 49,
+                "src": "268:19:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_AssetType_$41",
+                  "typeString": "enum ExchangeDomain.AssetType"
+                },
+                "typeName": {
+                  "id": 47,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 46,
+                    "name": "AssetType",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 41,
+                    "src": "268:9:1"
+                  },
+                  "referencedDeclaration": 41,
+                  "src": "268:9:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_AssetType_$41",
+                    "typeString": "enum ExchangeDomain.AssetType"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Asset",
+            "nameLocation": "207:5:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "200:94:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.OrderKey",
+            "id": 60,
+            "members": [
+              {
+                "constant": false,
+                "id": 51,
+                "mutability": "mutable",
+                "name": "owner",
+                "nameLocation": "369:5:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "361:13:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 50,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "361:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 53,
+                "mutability": "mutable",
+                "name": "salt",
+                "nameLocation": "417:4:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "412:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 52,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "412:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 56,
+                "mutability": "mutable",
+                "name": "sellAsset",
+                "nameLocation": "467:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "461:15:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                  "typeString": "struct ExchangeDomain.Asset"
+                },
+                "typeName": {
+                  "id": 55,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 54,
+                    "name": "Asset",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 49,
+                    "src": "461:5:1"
+                  },
+                  "referencedDeclaration": 49,
+                  "src": "461:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                    "typeString": "struct ExchangeDomain.Asset"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 59,
+                "mutability": "mutable",
+                "name": "buyAsset",
+                "nameLocation": "524:8:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 60,
+                "src": "518:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                  "typeString": "struct ExchangeDomain.Asset"
+                },
+                "typeName": {
+                  "id": 58,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 57,
+                    "name": "Asset",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 49,
+                    "src": "518:5:1"
+                  },
+                  "referencedDeclaration": 49,
+                  "src": "518:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Asset_$49_storage_ptr",
+                    "typeString": "struct ExchangeDomain.Asset"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "OrderKey",
+            "nameLocation": "307:8:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "300:239:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Order",
+            "id": 70,
+            "members": [
+              {
+                "constant": false,
+                "id": 63,
+                "mutability": "mutable",
+                "name": "key",
+                "nameLocation": "577:3:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "568:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_OrderKey_$60_storage_ptr",
+                  "typeString": "struct ExchangeDomain.OrderKey"
+                },
+                "typeName": {
+                  "id": 62,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 61,
+                    "name": "OrderKey",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 60,
+                    "src": "568:8:1"
+                  },
+                  "referencedDeclaration": 60,
+                  "src": "568:8:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_OrderKey_$60_storage_ptr",
+                    "typeString": "struct ExchangeDomain.OrderKey"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 65,
+                "mutability": "mutable",
+                "name": "selling",
+                "nameLocation": "665:7:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "660:12:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 64,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "660:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 67,
+                "mutability": "mutable",
+                "name": "buying",
+                "nameLocation": "758:6:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "753:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 66,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "753:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 69,
+                "mutability": "mutable",
+                "name": "sellerFee",
+                "nameLocation": "810:9:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 70,
+                "src": "805:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 68,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "805:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Order",
+            "nameLocation": "552:5:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "545:281:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "ExchangeDomain.Sig",
+            "id": 77,
+            "members": [
+              {
+                "constant": false,
+                "id": 72,
+                "mutability": "mutable",
+                "name": "v",
+                "nameLocation": "915:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "909:7:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint8",
+                  "typeString": "uint8"
+                },
+                "typeName": {
+                  "id": 71,
+                  "name": "uint8",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "909:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 74,
+                "mutability": "mutable",
+                "name": "r",
+                "nameLocation": "960:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "952:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                },
+                "typeName": {
+                  "id": 73,
+                  "name": "bytes32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "952:7:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 76,
+                "mutability": "mutable",
+                "name": "s",
+                "nameLocation": "1005:1:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 77,
+                "src": "997:9:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                },
+                "typeName": {
+                  "id": 75,
+                  "name": "bytes32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "997:7:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Sig",
+            "nameLocation": "869:3:1",
+            "nodeType": "StructDefinition",
+            "scope": 78,
+            "src": "862:151:1",
+            "visibility": "public"
+          }
+        ],
+        "scope": 79,
+        "src": "101:914:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:984:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-12-04T11:19:58.286Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
