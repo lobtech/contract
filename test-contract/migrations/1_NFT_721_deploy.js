@@ -2,7 +2,7 @@ var NFT721 = artifacts.require("NFT721");
 
 module.exports = function(deployer) {
   deployer.then(function() {
-    var admin = "0x6dC0c0be4c8B2dFE750156dc7d59FaABFb5B923D";
+    var admin = "0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10";
     return deployer
       .deploy(NFT721, "FingerNFT", "FingerNFT", admin, "ipfs:/", "ipfs:/")
       .then(function(token) {

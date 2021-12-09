@@ -7,8 +7,8 @@ var ExchangeOrdersHolder = artifacts.require("ExchangeOrdersHolder");
 
 module.exports = function(deployer) {
   deployer.then(async () => {
-    const beneficiary = "0x6dc0c0be4c8b2dfe750156dc7d59faabfb5b923d";
-    const buyerFeeSigner = "0x6dc0c0be4c8b2dfe750156dc7d59faabfb5b923d";
+    const beneficiary = "0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10";
+    const buyerFeeSigner = "0xfE01E99B6ee45d74b7d6057D9D3AA4473064FDd7";
 
     const tranferProxy = await TransferProxy.deployed();
     const transferProxyForDeprecated = await TransferProxyForDeprecated.deployed();
