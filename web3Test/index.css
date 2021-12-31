@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    background: linear-gradient(rgb(73, 156, 224), rgb(6, 46, 83));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item{
+    min-width: 100px;
+    border: 2px solid;
+    cursor: pointer;
+    padding: 10px 0px;
+    text-align: center;
+    margin-bottom: 10px;
+}
