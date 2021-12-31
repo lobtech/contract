@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <script src="./contract.js"></script>
+    <script>
+        console.log(stock);//质押合约
+        console.log(airdropTest);//空投合约
+        console.log(money); //代币合约
+
+        //获取账户
+        const getAccounts = async () => {
+            const web3 = new Web3(ethereum) // 创建一个新的web3 对象
+            const res =  await web3.eth.getAccounts()
+            console.log(`获取账户：`, res)
+        }
+
+        // 查询余额
+        const getBalance = async (address = '0xfc6a38DCd922bBbf3707D955B3202D221a2D2FE6') => {
+            const web3 = new Web3(ethereum) // 创建一个新的web3 对象
+            const res = await web3.eth.getBalance(address)
+            console.log(`你的账户余额: `, res)
+            return res 
+        }
+
+
+        //查询剩余个数
+        const contains = async () => {
+            const { abi, address } = money;
+            const web3 = new Web3(ethereum) // 创建一个新的web3 对象
+            const contract = new web3.eth.Contract(abi, address) // 创建合约
+            return await contract.methods.balanceOf('0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC').call()
+        }
+
+
+
+        //质押
+        const stockTest = async () => {
+            const { abi, address } = stock;
+            const web3 = new Web3(ethereum) // 创建一个新的web3 对象
+            const contract = new web3.eth.Contract(abi, address) // 创建合约
+            const res = await contract.methods.m_token().call()
+            console.log("m_token:", res);
+            // const res = await contract.methods.mint(10)
+            // .send({ from: '0xfc6a38DCd922bBbf3707D955B3202D221a2D2FE6' })
+            // .on('transactionHash', function (hash) {
+            //     console.log(`---------->日志输出:hash`, hash)
+            // })
+            // .on('receipt', function (receipt) {
+            //     console.log(`---------->日志输出:receipt`, receipt)
+            // })
+            // .on('confirmation', function (confirmationNumber, receipt) {
+            //     console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+            // })
+            // .on('error', (err) => {
+            //     console.log(`---------->日志输出:err`, err)
+            // })
+            // console.log(res);
+            
+        }
+
+
+    </script>
+    <script>
+
+        getAccounts() //获取账户
+        getBalance('0xfc6a38DCd922bBbf3707D955B3202D221a2D2FE6')  //查询余额
+        contains().then((res) => {  
+            console.log('剩余空投数量', res);
+        })
+        stockTest() //质押
+
+    </script>
+</body>
+</html>
