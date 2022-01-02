@@ -16,6 +16,14 @@ contract EggFactory is IERC1155Factory {
         seed = _numOptions;
     }
 
+    function name() external pure returns (string memory) {
+        return "LOB Egg faucet";
+    }
+
+    function symbol() external pure returns (string memory) {
+        return "LOBE";
+    }
+
     function canMint(uint256 _optionId, address _account)
         public
         view
