@@ -14,10 +14,7 @@ export function Faucet({ transferTokens, tokenSymbol, selectedAddress }) {
                 }}
             >
                 <div className="form-group">
-                    <label>Get a random Egg</label>
-                </div>
-                <div className="form-group">
-                    <input className="btn btn-primary" type="submit" value="Submit" />
+                    <input className="btn btn-primary" type="submit" value="Get a random Egg" />
                 </div>
             </form>
         </div>

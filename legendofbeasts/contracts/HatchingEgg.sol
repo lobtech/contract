@@ -2,12 +2,12 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 import "./Dragon.sol";
+import "./ERC1155SupplyForOwner.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
 contract HatchingEgg is
     ERC1155,
@@ -15,8 +15,10 @@ contract HatchingEgg is
     Pausable,
     ReentrancyGuard,
     ERC1155Burnable,
-    ERC1155Supply
+    ERC1155SupplyForOwner
 {
+    uint256 constant NUM_OPTIONS = 4;
+
     uint256 internal constant _DONE = 1;
     mapping(address => uint256) private _timestamps;
     uint256 private _delay;
@@ -45,21 +47,25 @@ contract HatchingEgg is
         _unpause();
     }
 
+    function supplyForOwner(address _owner) public view returns (uint256) {
+        return _supplyForOwner(_owner, NUM_OPTIONS);
+    }
+
     function breakUp(uint256 _optionId) public nonReentrant {
-        require(isReady(_optionId), "HatchingEgg: Not ready to breakup");
+        require(isReady(_msgSender()), "HatchingEgg: Not ready to breakup");
         _burn(msg.sender, _optionId, 1);
         _timestamps[msg.sender] = _DONE;
         Dragon dragon = Dragon(nftAddress);
         dragon.safeMint(msg.sender);
     }
 
-    function isReady(uint256 _optionId)
-        public
-        view
-        virtual
-        returns (bool ready)
-    {
-        return _timestamps[msg.sender] < block.timestamp;
+    // Request when the egg is ready to break up
+    function dueTime(address _owner) public view returns (uint256) {
+        return _timestamps[_owner];
+    }
+
+    function isReady(address _owner) public view returns (bool) {
+        return _timestamps[_owner] < block.timestamp;
     }
 
     function mint(
@@ -88,7 +94,8 @@ contract HatchingEgg is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal override(ERC1155, ERC1155Supply) whenNotPaused {
+    ) internal override(ERC1155) whenNotPaused {
+        require(_timestamps[operator] < block.timestamp, "Egg is not ready");
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

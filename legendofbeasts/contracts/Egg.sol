@@ -3,14 +3,20 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 import "./HatchingEgg.sol";
+import "./ERC1155SupplyForOwner.sol";
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
-contract Egg is ERC1155, Ownable, Pausable, ERC1155Burnable, ERC1155Supply {
+contract Egg is
+    ERC1155,
+    Ownable,
+    Pausable,
+    ERC1155Burnable,
+    ERC1155SupplyForOwner
+{
     address public nftAddress; // Hatching egg address
 
     enum Colors {
@@ -26,7 +32,7 @@ contract Egg is ERC1155, Ownable, Pausable, ERC1155Burnable, ERC1155Supply {
         uint256 readyTimestamp
     );
 
-    uint256 constant NUM_OPTIONS = 4;
+    uint256 public constant NUM_OPTIONS = 4;
     uint256 private delay;
 
     constructor(address _nftAddress, uint256 _delay)
@@ -46,6 +52,10 @@ contract Egg is ERC1155, Ownable, Pausable, ERC1155Burnable, ERC1155Supply {
 
     function unpause() public onlyOwner {
         _unpause();
+    }
+
+    function supplyForOwner(address _owner) public view returns (uint256) {
+        return _supplyForOwner(_owner, NUM_OPTIONS);
     }
 
     function hatch(uint256 _optionId) public {
@@ -81,7 +91,7 @@ contract Egg is ERC1155, Ownable, Pausable, ERC1155Burnable, ERC1155Supply {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal override(ERC1155, ERC1155Supply) whenNotPaused {
+    ) internal override(ERC1155) whenNotPaused {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

@@ -21,6 +21,7 @@ import { Loading } from "./Loading";
 import { Faucet } from "./Faucet";
 import { Incubator } from "./Incubator";
 import { Hatching } from "./Hatching";
+import { Dragon } from "./Dragon";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
@@ -29,6 +30,7 @@ import { NoTokensMessage } from "./NoTokensMessage";
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
 const GANACHE_NETWORK_ID = '5777';
+const FUJI_NETWORK_ID = '1';
 
 // This is an error code that indicates that the user canceled a transaction
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -64,7 +66,9 @@ export class Dapp extends React.Component {
       networkError: undefined,
       option: -1,
       hatching: false,
+      timeReady: 0,
       isReady: false,
+      dragonId: -1,
     };
 
     this.state = this.initialState;
@@ -111,9 +115,9 @@ export class Dapp extends React.Component {
             <p>
               Welcome <b>{this.state.selectedAddress}</b>, you have{" "}
               <b>
-                {this.state.balance.toString()} {this.state.tokenData.symbol}
+                {this.state.balance.gt(0) ? "claimed " : "not claimed "}
               </b>
-              .
+              your Egg.
             </p>
           </div>
         </div>
@@ -149,14 +153,17 @@ export class Dapp extends React.Component {
             {/*
               If the user has no tokens, we don't show the Tranfer form
             */}
-            {this.state.balance.gt(0) && !this.state.hatching && (
+            {this.state.balance.gt(0) && !this.state.hatching && this.state.option > -1 && (
               <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} />
             )}
 
             {this.state.hatching && (
-              <Hatching breakUp={(option) => this._breakUp(option)} isReady={this.state.isReady} option={this.state.option} />
+              <Hatching breakUp={(option) => this._breakUp(option)} isReady={this.state.isReady} timeReady={this.state.timeReady} option={this.state.option} />
             )}
 
+            {this.state.dragonId > -1 && (
+              <Dragon tokenId={this.state.dragonId} />
+            )}
             {/*
               This component displays a form that the user can use to send a 
               transaction and transfer some tokens.
@@ -262,6 +269,11 @@ export class Dapp extends React.Component {
       HatchingEggArtifact.abi,
       this._provider.getSigner(0)
     );
+    this._dragon = new ethers.Contract(
+      contractAddress.Dragon,
+      DragonArtifact.abi,
+      this._provider.getSigner(0)
+    );
   }
 
   // The next two methods are needed to start and stop polling data. While
@@ -300,11 +312,18 @@ export class Dapp extends React.Component {
       let hatching = option > -1;
       if (hatching) {
         this.setState({ hatching, option });
-        let isReady = await this._hegg.isReady(this.state.selectedAddress);
-        this.setState({ isReady });
+        let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
+        let timeReady = new Date(dueTime.toNumber() * 1000);
+
+        let isReady = timeReady < new Date();
+        this.setState({ isReady, timeReady });
       } else {
         option = await this._getOption(this._egg);
         this.setState({ option });
+        if (option < 0) {
+          let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
+          this.setState({ dragonId: dragonId.toNumber(), hatching: false });
+        }
       }
     }
   }
@@ -415,12 +434,15 @@ export class Dapp extends React.Component {
 
   // This method checks if Metamask selected network is Localhost:8545 
   _checkNetwork() {
-    if (window.ethereum.networkVersion === GANACHE_NETWORK_ID) {
+    let networkId = window.ethereum.networkVersion;
+    // if (networkId === GANACHE_NETWORK_ID) {
+    if (networkId === FUJI_NETWORK_ID) {
       return true;
     }
 
     this.setState({
-      networkError: 'Please connect Metamask to Localhost:7545'
+      // networkError: 'Please connect Metamask to Localhost:7545'
+      networkError: 'Please connect Metamask to Avalanche Fuji testnet'
     });
 
     return false;
