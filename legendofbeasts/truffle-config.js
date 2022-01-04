@@ -68,7 +68,7 @@ module.exports = {
     // Useful for private networks
     fuji: {
       provider: () => new HDWalletProvider(mnemonic, `https://api.avax-test.network/ext/bc/C/rpc`),
-      network_id: "*",   // This network is yours, in the cloud.
+      network_id: "1",   // This network is yours, in the cloud.
       production: false    // Treats this network as if it was a public net. (default: false)
     }
   },
@@ -113,4 +113,8 @@ module.exports = {
     //   }
     // }
   // }
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    snowtrace: '9P25TAF4WCCX7N78X11WJD3N6C39ADEJEK',
+  },
 };
