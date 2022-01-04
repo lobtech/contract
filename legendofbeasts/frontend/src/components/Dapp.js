@@ -35,9 +35,6 @@ const FUJI_CHAIN_ID = 43113;
 // This is an error code that indicates that the user canceled a transaction
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 
-// Total options of Eggs
-const NUM_OPTIONS = 4;
-
 // This component is in charge of doing these things:
 //   1. It connects to the user's wallet
 //   2. Initializes ethers and the Token contract
@@ -347,7 +344,8 @@ export class Dapp extends React.Component {
 
   async _getOption(contract) {
     let address = this.state.selectedAddress;
-    for (let i = 0; i < NUM_OPTIONS; i++) {
+    let numOptions = await contract.numOptions();
+    for (let i = 0; i < numOptions; i++) {
       let b = await contract.balanceOf(address, i);
       console.log(b);
       if (b.gt(0)) {
