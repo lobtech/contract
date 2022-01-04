@@ -29,8 +29,8 @@ import { NoTokensMessage } from "./NoTokensMessage";
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
-const GANACHE_NETWORK_ID = '5777';
-const FUJI_NETWORK_ID = '1';
+const GANACHE_CHAIN_ID = 5777;
+const FUJI_CHAIN_ID = 43113;
 
 // This is an error code that indicates that the user canceled a transaction
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -158,7 +158,7 @@ export class Dapp extends React.Component {
             )}
 
             {this.state.hatching && (
-              <Hatching breakUp={(option) => this._breakUp(option)} isReady={this.state.isReady} timeReady={this.state.timeReady} option={this.state.option} />
+              <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
             )}
 
             {this.state.dragonId > -1 && (
@@ -304,6 +304,11 @@ export class Dapp extends React.Component {
     this.setState({ tokenData: { name, symbol } });
   }
 
+  async _timeReady() {
+    let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
+    return dueTime;
+  }
+
   async _updateBalance() {
     const balance = await this._token.balanceOf(this.state.selectedAddress);
     this.setState({ balance });
@@ -311,16 +316,14 @@ export class Dapp extends React.Component {
       let option = await this._getOption(this._hegg);
       let hatching = option > -1;
       if (hatching) {
+        // Step 2 hatching egg
         this.setState({ hatching, option });
-        let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
-        let timeReady = new Date(dueTime.toNumber() * 1000);
-
-        let isReady = timeReady < new Date();
-        this.setState({ isReady, timeReady });
       } else {
+        // Step 1 egg
         option = await this._getOption(this._egg);
         this.setState({ option });
         if (option < 0) {
+          // Step 3 dragon
           let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
           this.setState({ dragonId: dragonId.toNumber(), hatching: false });
         }
@@ -329,7 +332,17 @@ export class Dapp extends React.Component {
   }
 
   async _startHatching(option) {
-    await this._egg.hatch(option);
+    let tx = await this._egg.hatch(option);
+    this.setState({ txBeingSent: tx.hash });
+    const receipt = await tx.wait();
+
+    // The receipt, contains a status flag, which is 0 to indicate an error.
+    if (receipt.status === 0) {
+      // We can't know the exact error that made the transaction fail when it
+      // was mined, so we throw this generic one.
+      throw new Error("Transaction failed");
+    }
+    this.setState({ txBeingSent: undefined });
   }
 
   async _getOption(contract) {
@@ -345,7 +358,17 @@ export class Dapp extends React.Component {
   }
 
   async _breakUp(option) {
-    await this._hegg.breakUp(option);
+    let tx = await this._hegg.breakUp(option);
+    this.setState({ txBeingSent: tx.hash });
+    const receipt = await tx.wait();
+
+    // The receipt, contains a status flag, which is 0 to indicate an error.
+    if (receipt.status === 0) {
+      // We can't know the exact error that made the transaction fail when it
+      // was mined, so we throw this generic one.
+      throw new Error("Transaction failed");
+    }
+    this.setState({ txBeingSent: undefined });
   }
   // This method sends an ethereum transaction to transfer tokens.
   // While this action is specific to this application, it illustrates how to
@@ -432,11 +455,11 @@ export class Dapp extends React.Component {
     this.setState(this.initialState);
   }
 
-  // This method checks if Metamask selected network is Localhost:8545 
+  // This method checks if Metamask selected network is Localhost:7545 
   _checkNetwork() {
-    let networkId = window.ethereum.networkVersion;
-    // if (networkId === GANACHE_NETWORK_ID) {
-    if (networkId === FUJI_NETWORK_ID) {
+    let chainId = parseInt(window.ethereum.chainId);
+    // if (networkId === GANACHE_CHAIN_ID) {
+    if (chainId === FUJI_CHAIN_ID) {
       return true;
     }
 

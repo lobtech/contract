@@ -6,6 +6,9 @@ Setup truffle development environment, you can install [Ganache](https://truffle
 npm install -g truffle
 npm install
 
+# env vars
+cp .secret.json.example .secret.json
+
 # run tests
 truffle test
 

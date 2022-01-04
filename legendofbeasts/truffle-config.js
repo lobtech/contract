@@ -21,7 +21,7 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 //
 const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
+const secret = require('.secret.json');
 
 module.exports = {
   /**
@@ -67,7 +67,7 @@ module.exports = {
     // },
     // Useful for private networks
     fuji: {
-      provider: () => new HDWalletProvider(mnemonic, `https://api.avax-test.network/ext/bc/C/rpc`),
+      provider: () => new HDWalletProvider(secret.mnemonic, `https://api.avax-test.network/ext/bc/C/rpc`),
       network_id: "1",   // This network is yours, in the cloud.
       production: false    // Treats this network as if it was a public net. (default: false)
     }
@@ -115,6 +115,6 @@ module.exports = {
   // }
   plugins: ['truffle-plugin-verify'],
   api_keys: {
-    snowtrace: '9P25TAF4WCCX7N78X11WJD3N6C39ADEJEK',
+    snowtrace: secret.snowtraceApiKey,
   },
 };

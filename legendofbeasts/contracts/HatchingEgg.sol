@@ -47,8 +47,8 @@ contract HatchingEgg is
         _unpause();
     }
 
-    function supplyForOwner(address _owner) public view returns (uint256) {
-        return _supplyForOwner(_owner, NUM_OPTIONS);
+    function numOptions() public pure override returns (uint256) {
+        return NUM_OPTIONS;
     }
 
     function breakUp(uint256 _optionId) public nonReentrant {

@@ -11,12 +11,15 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
  * clearly identified.
  */
 abstract contract ERC1155SupplyForOwner is ERC1155 {
-    function _supplyForOwner(address _owner, uint256 _numOptions)
+    function numOptions() public pure virtual returns (uint256);
+
+    function supplyForOwner(address _owner)
         internal
         view
         returns (uint256 total)
     {
-        for (uint256 i = 0; i < _numOptions; i++) {
+        uint256 options = numOptions();
+        for (uint256 i = 0; i < options; i++) {
             total += balanceOf(_owner, i);
         }
     }
