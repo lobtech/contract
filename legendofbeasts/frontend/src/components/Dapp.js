@@ -158,8 +158,8 @@ export class Dapp extends React.Component {
               <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
             )}
 
-            {this.state.dragonId > -1 && (
-              <Dragon tokenId={this.state.dragonId} />
+            {this.state.option < 0 && (
+              <Dragon getDragonId={() => this._getDragonId()} />
             )}
             {/*
               This component displays a form that the user can use to send a 
@@ -250,7 +250,7 @@ export class Dapp extends React.Component {
 
     // When, we initialize the contract using that provider and the token's
     // artifact. You can do this same thing with your contracts.
-    this._token = new ethers.Contract(
+    this._factory = new ethers.Contract(
       contractAddress.EggFactory,
       EggFactoryArtifact.abi,
       this._provider.getSigner(0)
@@ -295,8 +295,8 @@ export class Dapp extends React.Component {
   // The next two methods just read from the contract and store the results
   // in the component state.
   async _getTokenData() {
-    const name = await this._token.name();
-    const symbol = await this._token.symbol();
+    const name = await this._factory.name();
+    const symbol = await this._factory.symbol();
 
     this.setState({ tokenData: { name, symbol } });
   }
@@ -307,7 +307,7 @@ export class Dapp extends React.Component {
   }
 
   async _updateBalance() {
-    const balance = await this._token.balanceOf(this.state.selectedAddress);
+    const balance = await this._factory.balanceOf(this.state.selectedAddress);
     this.setState({ balance });
     if (balance.gt(0)) {
       let option = await this._getOption(this._hegg);
@@ -321,11 +321,15 @@ export class Dapp extends React.Component {
         this.setState({ option });
         if (option < 0) {
           // Step 3 dragon
-          let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
-          this.setState({ dragonId: dragonId.toNumber(), hatching: false });
+          this.setState({ hatching: false });
         }
       }
     }
+  }
+
+  async _getDragonId() {
+    let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
+    return dragonId.toNumber();
   }
 
   async _startHatching(option) {
@@ -393,7 +397,7 @@ export class Dapp extends React.Component {
 
       // We send the transaction, and save its hash in the Dapp's state. This
       // way we can indicate that we are waiting for it to be mined.
-      const tx = await this._token.mintTo(to);
+      const tx = await this._factory.mintTo(to);
       this.setState({ txBeingSent: tx.hash });
 
       // We use .wait() to wait for the transaction to be mined. This method
