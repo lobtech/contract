@@ -346,6 +346,7 @@ export class Dapp extends React.Component {
 
   //点击孵化执行
   async _startHatching(option) {
+    console.log(option, '_startHatching');
     await this._egg.hatch(option);
   }
 
