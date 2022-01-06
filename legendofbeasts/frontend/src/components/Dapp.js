@@ -328,6 +328,8 @@ export class Dapp extends React.Component {
   }
 
   async _getDragonId() {
+    let balance = await this._dragon.balanceOf(this.state.selectedAddress);
+    if (balance.eq(0)) return -1;
     let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
     return dragonId.toNumber();
   }
@@ -464,11 +466,11 @@ export class Dapp extends React.Component {
 
   // This method checks if Metamask selected network is Localhost:7545 
   _checkNetwork() {
-    let chainId = parseInt(window.ethereum.chainId);
-    if (chainId === GANACHE_CHAIN_ID) {
-      // if (chainId === FUJI_CHAIN_ID) {
-      return true;
-    }
+    // let chainId = parseInt(window.ethereum.chainId);
+    // if (chainId === GANACHE_CHAIN_ID) {
+    // if (chainId === FUJI_CHAIN_ID) {
+    return true;
+    // }
 
     this.setState({
       networkError: 'Please connect Metamask to Localhost:7545'
