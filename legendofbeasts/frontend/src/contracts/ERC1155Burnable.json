@@ -374,10 +374,10 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol",
     "exportedSymbols": {
       "Address": [
-        3370
+        3237
       ],
       "Context": [
-        3392
+        3259
       ],
       "ERC1155": [
         1332
@@ -386,19 +386,19 @@
         1564
       ],
       "ERC165": [
-        3693
+        3560
       ],
       "IERC1155": [
         1454
       ],
       "IERC1155MetadataURI": [
-        1712
+        1579
       ],
       "IERC1155Receiver": [
         1495
       ],
       "IERC165": [
-        3705
+        3572
       ]
     },
     "id": 1565,
@@ -458,11 +458,11 @@
         "linearizedBaseContracts": [
           1564,
           1332,
-          1712,
+          1579,
           1454,
-          3693,
-          3705,
-          3392
+          3560,
+          3572,
+          3259
         ],
         "name": "ERC1155Burnable",
         "nameLocation": "360:15:6",
@@ -519,7 +519,7 @@
                               "name": "_msgSender",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3382,
+                              "referencedDeclaration": 3249,
                               "src": "538:10:6",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -571,7 +571,7 @@
                                 "name": "_msgSender",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3382,
+                                "referencedDeclaration": 3249,
                                 "src": "580:10:6",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -945,7 +945,7 @@
                               "name": "_msgSender",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3382,
+                              "referencedDeclaration": 3249,
                               "src": "879:10:6",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -997,7 +997,7 @@
                                 "name": "_msgSender",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3382,
+                                "referencedDeclaration": 3249,
                                 "src": "921:10:6",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -1350,10 +1350,10 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol",
     "exportedSymbols": {
       "Address": [
-        3370
+        3237
       ],
       "Context": [
-        3392
+        3259
       ],
       "ERC1155": [
         1332
@@ -1362,19 +1362,19 @@
         1564
       ],
       "ERC165": [
-        3693
+        3560
       ],
       "IERC1155": [
         1454
       ],
       "IERC1155MetadataURI": [
-        1712
+        1579
       ],
       "IERC1155Receiver": [
         1495
       ],
       "IERC165": [
-        3705
+        3572
       ]
     },
     "id": 1565,
@@ -1434,11 +1434,11 @@
         "linearizedBaseContracts": [
           1564,
           1332,
-          1712,
+          1579,
           1454,
-          3693,
-          3705,
-          3392
+          3560,
+          3572,
+          3259
         ],
         "name": "ERC1155Burnable",
         "nameLocation": "360:15:6",
@@ -1495,7 +1495,7 @@
                               "name": "_msgSender",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3382,
+                              "referencedDeclaration": 3249,
                               "src": "538:10:6",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -1547,7 +1547,7 @@
                                 "name": "_msgSender",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3382,
+                                "referencedDeclaration": 3249,
                                 "src": "580:10:6",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -1921,7 +1921,7 @@
                               "name": "_msgSender",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3382,
+                              "referencedDeclaration": 3249,
                               "src": "879:10:6",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -1973,7 +1973,7 @@
                                 "name": "_msgSender",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3382,
+                                "referencedDeclaration": 3249,
                                 "src": "921:10:6",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -2328,7 +2328,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2022-01-02T14:48:39.019Z",
+  "updatedAt": "2022-01-06T12:30:17.446Z",
   "devdoc": {
     "details": "Extension of {ERC1155} that allows token holders to destroy both their own tokens and those that they have been approved to use. _Available since v3.1._",
     "kind": "dev",

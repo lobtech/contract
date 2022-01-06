@@ -4,7 +4,7 @@ const Dragon = artifacts.require("Dragon");
 const EggFactory = artifacts.require("EggFactory");
 const fs = require("fs");
 
-module.exports = async (deployer) => {
+module.exports = async (deployer, network) => {
   await deployer.deploy(Dragon);
   await deployer.deploy(HatchingEgg, Dragon.address, 60);
   await deployer.deploy(Egg, HatchingEgg.address, 60);
@@ -22,6 +22,6 @@ module.exports = async (deployer) => {
 
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ Egg: Egg.address, HatchingEgg: HatchingEgg.address, EggFactory: EggFactory.address, Dragon: Dragon.address }, undefined, 2)
+    JSON.stringify({ network, Egg: Egg.address, HatchingEgg: HatchingEgg.address, EggFactory: EggFactory.address, Dragon: Dragon.address }, undefined, 2)
   );
 };

@@ -466,17 +466,21 @@ export class Dapp extends React.Component {
 
   // This method checks if Metamask selected network is Localhost:7545 
   _checkNetwork() {
-    // let chainId = parseInt(window.ethereum.chainId);
-    // if (chainId === GANACHE_CHAIN_ID) {
-    // if (chainId === FUJI_CHAIN_ID) {
+    let { network } = contractAddress;
+    let chainId = parseInt(window.ethereum.chainId);
+    if (network === 'development' && chainId !== GANACHE_CHAIN_ID) {
+      this.setState({
+        networkError: 'Please connect Metamask to Localhost:7545'
+      });
+      return false;
+    }
+    if (network === 'fuji' && chainId !== FUJI_CHAIN_ID) {
+      this.setState({
+        networkError: 'Please connect Metamask to Avalanche Fuji testnet'
+      });
+      return false;
+    }
+
     return true;
-    // }
-
-    this.setState({
-      networkError: 'Please connect Metamask to Localhost:7545'
-      // networkError: 'Please connect Metamask to Avalanche Fuji testnet'
-    });
-
-    return false;
   }
 }

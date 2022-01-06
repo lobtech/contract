@@ -1453,7 +1453,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2022-01-06T08:32:27.468Z",
+  "updatedAt": "2022-01-06T12:30:17.486Z",
   "devdoc": {
     "details": "Extension of ERC1155 that adds tracking of balance per owner. Useful for scenarios where ownership of Fungible and Non-fungible tokens have to be clearly identified.",
     "kind": "dev",

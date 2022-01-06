@@ -13,7 +13,7 @@ cp .secret.json.example .secret.json
 truffle test
 
 truffle compile
-truffle deploy --network development
+truffle deploy --network development --reset
 ```
 
 # Design

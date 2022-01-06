@@ -1,4 +1,5 @@
 {
+  "network": "fuji",
   "Egg": "0x7f5Bf6FdDCefB4A7F8a9Ac1EF3544ffa9C13B271",
   "HatchingEgg": "0x32FeA9b731D8107D6acEfF1B728336C8099d8543",
   "EggFactory": "0x84bA4f69acC615b9df7F9e22bc1Ac33351d3AeBf",

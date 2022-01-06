@@ -117,4 +117,5 @@ module.exports = {
   api_keys: {
     snowtrace: secret.snowtraceApiKey,
   },
+  contracts_build_directory: 'frontend/src/contracts',
 };
