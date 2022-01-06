@@ -70,14 +70,14 @@ export class Dapp extends React.Component {
       isReady: false,
       dragonId: -1,
     };
-
+    
     this.state = this.initialState;
   }
 
   render() {
     // Ethereum wallets inject the window.ethereum object. If it hasn't been
     // injected, we instruct the user to install MetaMask.
-    if (window.ethereum === undefined) {
+    if (window.ethereum === undefined) { //没有装狐狸就return这个
       return <NoWalletDetected />;
     }
 
@@ -110,7 +110,7 @@ export class Dapp extends React.Component {
         <div className="row">
           <div className="col-12">
             <h1>
-              {this.state.tokenData.name} ({this.state.tokenData.symbol})
+              {this.state.tokenData.name + '9990000000000'} ({this.state.tokenData.symbol})
             </h1>
             <p>
               Welcome <b>{this.state.selectedAddress}</b>, you have{" "}
@@ -179,6 +179,13 @@ export class Dapp extends React.Component {
                 selectedAddress={this.state.selectedAddress}
               />
             )}
+             <Faucet
+                transferTokens={(to) =>
+                  this._transferTokens(to)
+                }
+                tokenSymbol={this.state.tokenData.symbol}
+                selectedAddress={this.state.selectedAddress}
+              />
           </div>
         </div>
       </div>
@@ -303,31 +310,41 @@ export class Dapp extends React.Component {
 
     this.setState({ tokenData: { name, symbol } });
   }
-
+ 
+  //更新账户状态
   async _updateBalance() {
     const balance = await this._token.balanceOf(this.state.selectedAddress);
     this.setState({ balance });
     if (balance.gt(0)) {
       let option = await this._getOption(this._hegg);
+      
       let hatching = option > -1;
+      console.log(hatching, option, 'hatching')
+      //表示
       if (hatching) {
         this.setState({ hatching, option });
         let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
         let timeReady = new Date(dueTime.toNumber() * 1000);
-
+        console.log(dueTime, 'dueTime')
+        console.log(timeReady, 'timeReady')
         let isReady = timeReady < new Date();
+
+        console.log(isReady, 'isReady')
         this.setState({ isReady, timeReady });
       } else {
         option = await this._getOption(this._egg);
         this.setState({ option });
+        console.log(option, 'option')
         if (option < 0) {
           let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
+          console.log(dragonId, 'dragonId');
           this.setState({ dragonId: dragonId.toNumber(), hatching: false });
         }
       }
     }
   }
 
+  //点击孵化执行
   async _startHatching(option) {
     await this._egg.hatch(option);
   }
@@ -345,13 +362,14 @@ export class Dapp extends React.Component {
   }
 
   async _breakUp(option) {
+    console.log(option)
     await this._hegg.breakUp(option);
   }
-  // This method sends an ethereum transaction to transfer tokens.
-  // While this action is specific to this application, it illustrates how to
-  // send a transaction.
+  // 此方法发送以太坊交易以转移代币。
+  // 虽然此操作特定于此应用程序，但它说明了如何
+  // 发送交易。
   async _transferTokens(to) {
-    // Sending a transaction is a complex operation:
+    //  发送交易是一个复杂的操作：
     //   - The user can reject it
     //   - It can fail before reaching the ethereum network (i.e. if the user
     //     doesn't have ETH for paying for the tx's gas)
@@ -373,6 +391,7 @@ export class Dapp extends React.Component {
       // We send the transaction, and save its hash in the Dapp's state. This
       // way we can indicate that we are waiting for it to be mined.
       const tx = await this._token.mintTo(to);
+      console.log(tx)
       this.setState({ txBeingSent: tx.hash });
 
       // We use .wait() to wait for the transaction to be mined. This method
@@ -381,13 +400,13 @@ export class Dapp extends React.Component {
 
       // The receipt, contains a status flag, which is 0 to indicate an error.
       if (receipt.status === 0) {
-        // We can't know the exact error that made the transaction fail when it
+        // We can't know the exact error that made the transaction fail when it 
         // was mined, so we throw this generic one.
         throw new Error("Transaction failed");
       }
 
-      // If we got here, the transaction was successful, so you may want to
-      // update your state. Here, we update the user's balance.
+      // 如果我们到了这里，交易成功了，所以你可能想
+      // 更新你的状态。在这里，我们更新用户的余额。
       await this._updateBalance();
     } catch (error) {
       // We check the error code to see if this error was produced because the
@@ -403,7 +422,7 @@ export class Dapp extends React.Component {
     } finally {
       // If we leave the try/catch, we aren't sending a tx anymore, so we clear
       // this part of the state.
-      this.setState({ txBeingSent: undefined });
+      this.setState({ txBeingSent: undefined }); 
     }
   }
 
