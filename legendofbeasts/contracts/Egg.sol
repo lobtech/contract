@@ -34,12 +34,29 @@ contract Egg is
 
     uint256 public constant NUM_OPTIONS = 4;
     uint256 private delay;
+    string constant URI_PREFIX = "https://assets.hbeasts.com/eggs/";
 
     constructor(address _nftAddress, uint256 _delay)
         ERC1155("https://assets.hbeasts.com/eggs/{id}")
     {
         nftAddress = _nftAddress;
         delay = _delay;
+    }
+
+    function uri(uint256 _tokenId)
+        public
+        pure
+        override
+        returns (string memory)
+    {
+        return
+            string(
+                abi.encodePacked(
+                    URI_PREFIX,
+                    Strings.toString(_tokenId),
+                    ".json"
+                )
+            );
     }
 
     function setURI(string memory newuri) public onlyOwner {

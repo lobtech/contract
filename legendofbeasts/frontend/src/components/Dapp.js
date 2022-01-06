@@ -29,7 +29,7 @@ import { NoTokensMessage } from "./NoTokensMessage";
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
-const GANACHE_CHAIN_ID = 5777;
+const GANACHE_CHAIN_ID = 1337;
 const FUJI_CHAIN_ID = 43113;
 
 // This is an error code that indicates that the user canceled a transaction
@@ -151,14 +151,14 @@ export class Dapp extends React.Component {
               If the user has no tokens, we don't show the Tranfer form
             */}
             {this.state.balance.gt(0) && !this.state.hatching && this.state.option > -1 && (
-              <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} />
+              <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} getUri={(option) => this._getUri(option)} />
             )}
 
             {this.state.hatching && (
               <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
             )}
 
-            {this.state.option < 0 && (
+            {this.state.balance.gt(0) && this.state.option < 0 && (
               <Dragon getDragonId={() => this._getDragonId()} />
             )}
             {/*
@@ -346,6 +346,11 @@ export class Dapp extends React.Component {
     this.setState({ txBeingSent: undefined });
   }
 
+  async _getUri(tokenId) {
+    let uri = await this._egg.uri(tokenId);
+    return uri;
+  }
+
   async _getOption(contract) {
     let address = this.state.selectedAddress;
     let numOptions = await contract.numOptions();
@@ -460,14 +465,14 @@ export class Dapp extends React.Component {
   // This method checks if Metamask selected network is Localhost:7545 
   _checkNetwork() {
     let chainId = parseInt(window.ethereum.chainId);
-    // if (networkId === GANACHE_CHAIN_ID) {
-    if (chainId === FUJI_CHAIN_ID) {
+    if (chainId === GANACHE_CHAIN_ID) {
+      // if (chainId === FUJI_CHAIN_ID) {
       return true;
     }
 
     this.setState({
-      // networkError: 'Please connect Metamask to Localhost:7545'
-      networkError: 'Please connect Metamask to Avalanche Fuji testnet'
+      networkError: 'Please connect Metamask to Localhost:7545'
+      // networkError: 'Please connect Metamask to Avalanche Fuji testnet'
     });
 
     return false;
