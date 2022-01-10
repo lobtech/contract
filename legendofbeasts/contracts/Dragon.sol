@@ -11,7 +11,7 @@ contract Dragon is ERC721, ERC721Enumerable, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    event DragonBrokeOut(address indexed to, uint256 tokenId);
+    event DragonBrokeOut(address indexed to, uint256 optionId, uint256 tokenId);
 
     constructor() ERC721("Dragon", "DRA") {}
 
@@ -19,11 +19,11 @@ contract Dragon is ERC721, ERC721Enumerable, Ownable {
         return "https://assets.hbeasts.com/dragons/{id}";
     }
 
-    function safeMint(address to) public onlyOwner {
+    function safeMintWithOption(address to, uint256 optionId) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
-        emit DragonBrokeOut(to, tokenId);
+        emit DragonBrokeOut(to, optionId, tokenId);
     }
 
     // The following functions are overrides required by Solidity.

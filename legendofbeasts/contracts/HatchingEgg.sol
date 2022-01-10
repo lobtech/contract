@@ -56,7 +56,7 @@ contract HatchingEgg is
         _burn(msg.sender, _optionId, 1);
         _timestamps[msg.sender] = _DONE;
         Dragon dragon = Dragon(nftAddress);
-        dragon.safeMint(msg.sender);
+        dragon.safeMintWithOption(msg.sender, _optionId);
     }
 
     // Request when the egg is ready to break up
