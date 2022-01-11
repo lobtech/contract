@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import "./IERC1155Factory.sol";
+import "./interfaces/IERC1155Factory.sol";
+import "./utils/RNG.sol";
 import "./Egg.sol";
 
-contract EggFactory is IERC1155Factory {
+contract EggFactory is IERC1155Factory, RNG {
     address private nftAddress;
     uint256 private numOptions;
     uint256 private seed;
@@ -43,14 +44,5 @@ contract EggFactory is IERC1155Factory {
         mintedAddresses[msg.sender] = 1;
         Egg egg = Egg(nftAddress);
         egg.mint(_to, _optionId, 1, "0x0");
-    }
-
-    function _random() internal returns (uint256 randomNumber) {
-        randomNumber = uint256(
-            keccak256(
-                abi.encodePacked(blockhash(block.number - 1), msg.sender, seed)
-            )
-        );
-        seed = randomNumber;
     }
 }

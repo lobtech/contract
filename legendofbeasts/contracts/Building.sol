@@ -1,46 +1,59 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.8.2;
 
 import "./interfaces/IERC721MintWithOption.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Dragon is ERC721, ERC721Enumerable, IERC721MintWithOption, Ownable {
+contract LOBHouse is
+    ERC721,
+    ERC721Enumerable,
+    Pausable,
+    Ownable,
+    ERC721Burnable,
+    IERC721MintWithOption
+{
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    event DragonBrokeOut(address indexed to, uint256 optionId, uint256 tokenId);
+    event HouseBuilt(address indexed to, uint256 optionId, uint256 tokenId);
 
-    constructor() ERC721("Dragon", "DRA") {}
+    constructor() ERC721("LOBHouse", "HOUSE") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://assets.hbeasts.com/dragons/{id}";
+        return "https://api.hbeasts.com/assets/buildings/{id}.json";
     }
 
-    function safeMintWithOption(address to, uint256 optionId)
-        public
-        override
-        onlyOwner
-    {
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function safeMintWithOption(address to, uint256 optionId) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
-        emit DragonBrokeOut(to, optionId, tokenId);
+        emit HouseBuilt(to, optionId, tokenId);
     }
-
-    // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721, ERC721Enumerable) {
+    ) internal override(ERC721, ERC721Enumerable) whenNotPaused {
         super._beforeTokenTransfer(from, to, tokenId);
     }
+
+    // The following functions are overrides required by Solidity.
 
     function supportsInterface(bytes4 interfaceId)
         public

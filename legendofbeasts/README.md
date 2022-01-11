@@ -26,4 +26,6 @@ The `HatchingEgg` is time locked, it can only turn into a Dragon after a delay
 
 Ownership is transfer on deployment, there is no other way to direct mint intermediate tokens
 
+`LootBox` is itself a ERC1155 token, the TokenId correspond to the rareness
+
 Check the [tests](/test) for more details

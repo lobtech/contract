@@ -59,7 +59,7 @@ contract("HatchingEgg", function (accounts) {
     balance = await hegg.balanceOf(userA, option);
     assert.equal(1, balance.toNumber());
 
-    assert.isFalse(await hegg.isReady({ from: userA }));
+    assert.isFalse(await hegg.isReady(userA));
   });
 
   it("is not allow to breakup when not ready", async () => {

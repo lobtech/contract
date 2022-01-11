@@ -47,7 +47,10 @@ function getRandomDragonForOption(optionId) {
 }
 
 function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+  // TODO use secure random
+  // const crypto = require('crypto');
+  // return crypto.randomInt(0, max);
+  return Math.floor(Math.random() * max); // pseudo random
 }
 
 main();
