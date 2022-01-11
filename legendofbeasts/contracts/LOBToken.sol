@@ -7,13 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-contract LegendOfBeasts is
-    ERC20,
-    ERC20Burnable,
-    Ownable,
-    ERC20Permit,
-    ERC20Votes
-{
+contract LOBToken is ERC20, ERC20Burnable, Ownable, ERC20Permit, ERC20Votes {
     constructor() ERC20("LegendOfBeasts", "LOB") ERC20Permit("LegendOfBeasts") {
         _mint(msg.sender, 1000000 * 10**decimals());
     }

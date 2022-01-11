@@ -11,12 +11,12 @@ contract BuildingFactory is Ownable, RNG {
     // address private spender;
     // Counters.Counter private _tokenIdCounter;
 
-    LOBHouse private building;
+    Building private building;
 
     // event HouseBuilt(address indexed to, uint256 optionId, uint256 tokenId);
 
     constructor(address _nftAddress) {
-        building = LOBHouse(_nftAddress);
+        building = Building(_nftAddress);
     }
 
     function mint(

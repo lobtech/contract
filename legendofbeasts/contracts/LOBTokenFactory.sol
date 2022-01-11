@@ -4,12 +4,12 @@ pragma solidity ^0.8.2;
 import "./LOBToken.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LOBFactory is Ownable {
-    LegendOfBeasts private lob;
+contract LOBTokenFactory is Ownable {
+    LOBToken private lob;
     address private spender;
 
     constructor(address _lobAddress, address _spender) {
-        lob = LegendOfBeasts(_lobAddress);
+        lob = LOBToken(_lobAddress);
         spender = _spender;
     }
 
