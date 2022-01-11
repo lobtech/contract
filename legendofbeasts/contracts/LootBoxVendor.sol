@@ -31,6 +31,11 @@ contract LootBoxVendor is Ownable {
         feeEther[_optionId] = _fee;
     }
 
+    function setFeeUSDT(uint256 _optionId, uint256 _fee) public onlyOwner {
+        require(_optionId < numOptions, "Option not available");
+        feeUSDT[_optionId] = _fee;
+    }
+
     function setFeeToken(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeToken[_optionId] = _fee;
@@ -80,8 +85,7 @@ contract LootBoxVendor is Ownable {
         uint256 _optionId,
         uint256 _amount
     ) private {
-        uint256 allowance = _token.allowance(_msgSender(), address(this));
-        require(allowance >= _totalPrice, "Check the token allowance");
+        // allowanced check in transferFrom
         _token.transferFrom(_msgSender(), feeReceiver, _totalPrice);
         lootbox.mint(_msgSender(), _optionId, _amount, "0x0");
     }

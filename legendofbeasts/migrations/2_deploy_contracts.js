@@ -7,6 +7,7 @@ const EggFactory = artifacts.require("EggFactory");
 const LOBToken = artifacts.require("LOBToken");
 const LOBTokenFactory = artifacts.require("LOBTokenFactory");
 const LootBox = artifacts.require("LootBox");
+const LootBoxRandomness = artifacts.require("LootBoxRandomness");
 const LootBoxVendor = artifacts.require("LootBoxVendor");
 const Building = artifacts.require("Building");
 const BuildingFactory = artifacts.require("BuildingFactory");
@@ -15,7 +16,7 @@ const MagicWeaponFactory = artifacts.require("MagicWeaponFactory");
 
 const fs = require("fs");
 const values = require("../lib/valuesCommon");
-const { setupLootboxVendor, setupLootbox, setupMagicWeaponFactory } = require("../lib/setupLootoboxes");
+const { setupLootboxVendor, setupLootBox, setupMagicWeaponFactory } = require("../lib/setupLootboxes");
 
 module.exports = async (deployer, network) => {
   await deployer.deploy(Dragon);
@@ -39,11 +40,13 @@ module.exports = async (deployer, network) => {
   let magicWeapon = await MagicWeapon.deployed();
   await deployer.deploy(MagicWeaponFactory, MagicWeapon.address);
   let magicWeaponFactory = await MagicWeaponFactory.deployed();
-  await deployer.deploy(LootBox);
+  await deployer.deploy(LootBoxRandomness);
+  await deployer.link(LootBoxRandomness, LootBox);
+  await deployer.deploy(LootBox, LOBToken.address);
   let lootbox = await LootBox.deployed();
   await deployer.deploy(LootBoxVendor, LOBToken.address, LootBox.address, values.NUM_LOOTBOX_OPTIONS);
   let vendor = await LootBoxVendor.deployed();
-  setupLootbox(lootbox, EggFactory, LOBTokenFactory, MagicWeaponFactory, MagicWeaponFactory, MagicWeaponFactory, BuildingFactory, BuildingFactory, BuildingFactory);
+  setupLootBox(lootbox, EggFactory, LOBTokenFactory, MagicWeaponFactory, MagicWeaponFactory, MagicWeaponFactory, BuildingFactory, BuildingFactory, BuildingFactory);
   setupLootboxVendor(vendor, values.FEE_RECEIVER);
   setupMagicWeaponFactory(magicWeaponFactory);
   buildingFactory.transferOwnership(lootbox.address);

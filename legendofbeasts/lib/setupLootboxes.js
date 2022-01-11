@@ -27,6 +27,9 @@ const weaponCategories = [
   [6, 7, 8]
 ];
 
+const lootboxPriceUSDT = [1, 5, 20, 100, 500];
+const lootboxPriceLOB = [100, 500];
+
 const WEAPON_OPTIONS = 9;
 const TOTAL_SUPPLY = 1000;
 
@@ -47,6 +50,7 @@ const setupLootBox = async (lootBox, ...factories) => {
   for (let i = 0; i < values.NUM_LOOTBOX_OPTIONS; i++) {
     await lootBox.setProbabilitiesForOption(i, classProbabilities[i]);
   }
+  lootBox.setFeeReceiver(values.FEE_RECEIVER);
 };
 
 const setupMagicWeaponFactory = async (factory) => {
@@ -58,6 +62,11 @@ const setupMagicWeaponFactory = async (factory) => {
 const setupLootboxVendor = async (vendor, feeReceiver) => {
   await vendor.setUSDT(values.USDT_ADDRESS);
   await vendor.setFeeReceiver(feeReceiver);
+  for (let i = 0; i < 5; i++) {
+    await vendor.setFeeUSDT(i, lootboxPriceUSDT[i] * 1000000);
+  }
+  await vendor.setFeeToken(5, lootboxPriceLOB[0] * 1000000);
+  await vendor.setFeeToken(6, lootboxPriceLOB[1] * 1000000);
 }
 
 const preMintWeapons = async (weapon, owner, factory) => {

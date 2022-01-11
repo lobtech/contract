@@ -3,12 +3,19 @@ import React from "react";
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
 
+import { Link, Route } from "wouter";
+
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import EggFactoryArtifact from "../contracts/EggFactory.json";
 import EggArtifact from "../contracts/Egg.json";
 import HatchingEggArtifact from "../contracts/HatchingEgg.json";
 import DragonArtifact from "../contracts/Dragon.json";
+
+import LOBToken from "../contracts/LOBToken.json";
+import LootBoxArtifact from "../contracts/LootBox.json";
+import LootBoxVendorArtifact from "../contracts/LootBoxVendor.json";
+
 import contractAddress from "../contract-address.json";
 
 // All the logic of this dapp is contained in the Dapp component.
@@ -22,6 +29,9 @@ import { Faucet } from "./Faucet";
 import { Incubator } from "./Incubator";
 import { Hatching } from "./Hatching";
 import { Dragon } from "./Dragon";
+import { LootBoxVendor } from "./LootBoxVendor";
+import { BoxCollection } from "./BoxCollection";
+
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
@@ -106,23 +116,17 @@ export class Dapp extends React.Component {
       <div className="container p-4">
         <div className="row">
           <div className="col-12">
-            <h1>
-              {this.state.tokenData.name} ({this.state.tokenData.symbol})
-            </h1>
-            <p>
-              Welcome <b>{this.state.selectedAddress}</b>, you have{" "}
-              <b>
-                {this.state.balance.gt(0) ? "claimed " : "not claimed "}
-              </b>
-              your Egg.
-            </p>
-          </div>
-        </div>
-
-        <hr />
-
-        <div className="row">
-          <div className="col-12">
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/buy">Buy</Link>
+              </li>
+              <li>
+                <Link to="/boxes">Boxes</Link>
+              </li>
+            </ul>
             {/* 
               Sending a transaction isn't an immidiate action. You have to wait
               for it to be mined.
@@ -144,38 +148,62 @@ export class Dapp extends React.Component {
             )}
           </div>
         </div>
+        <hr />
 
         <div className="row">
           <div className="col-12">
-            {/*
-              If the user has no tokens, we don't show the Tranfer form
-            */}
-            {this.state.balance.gt(0) && !this.state.hatching && this.state.option > -1 && (
-              <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} getUri={(option) => this._getUri(option)} />
-            )}
+            <Route path="/">
+              <div className="row">
+                <div className="col-12">
+                  <h1>
+                    {this.state.tokenData.name} ({this.state.tokenData.symbol})
+                  </h1>
+                  <p>
+                    Welcome <b>{this.state.selectedAddress}</b>, you have{" "}
+                    <b>
+                      {this.state.balance.gt(0) ? "claimed " : "not claimed "}
+                    </b>
+                    your Egg.
+                  </p>
+                </div>
+              </div>
+              {/*
+                If the user has no tokens, we don't show the Tranfer form
+              */}
+              {this.state.balance.gt(0) && !this.state.hatching && this.state.option > -1 && (
+                <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} getUri={(option) => this._getUri(option)} />
+              )}
 
-            {this.state.hatching && (
-              <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
-            )}
+              {this.state.hatching && (
+                <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
+              )}
 
-            {this.state.balance.gt(0) && this.state.option < 0 && (
-              <Dragon getDragonId={() => this._getDragonId()} />
-            )}
-            {/*
+              {this.state.balance.gt(0) && this.state.option < 0 && (
+                <Dragon getDragonId={() => this._getDragonId()} />
+              )}
+              {this.state.balance.eq(0) && (
+                <Faucet
+                  transferTokens={(to) =>
+                    this._transferTokens(to)
+                  }
+                  tokenSymbol={this.state.tokenData.symbol}
+                  selectedAddress={this.state.selectedAddress}
+                />
+              )}
+
+              {/*
               This component displays a form that the user can use to send a 
               transaction and transfer some tokens.
               The component doesn't have logic, it just calls the transferTokens
               callback.
-            */}
-            {this.state.balance.eq(0) && (
-              <Faucet
-                transferTokens={(to) =>
-                  this._transferTokens(to)
-                }
-                tokenSymbol={this.state.tokenData.symbol}
-                selectedAddress={this.state.selectedAddress}
-              />
-            )}
+              */}
+            </Route>
+            <Route path="/buy">
+              <LootBoxVendor lob={this._lob} lootbox={this._lootbox} vendor={this._vendor} />
+            </Route>
+            <Route path="/boxes">
+              <BoxCollection lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />
+            </Route>
           </div>
         </div>
       </div>
@@ -220,7 +248,7 @@ export class Dapp extends React.Component {
     });
 
     // We reset the dapp state if the network is changed
-    window.ethereum.on("networkChanged", ([networkId]) => {
+    window.ethereum.on("chainChanged", ([chainId]) => {
       this._stopPollingData();
       this._resetState();
     });
@@ -269,6 +297,21 @@ export class Dapp extends React.Component {
     this._dragon = new ethers.Contract(
       contractAddress.Dragon,
       DragonArtifact.abi,
+      this._provider.getSigner(0)
+    );
+    this._lootbox = new ethers.Contract(
+      contractAddress.LootBox,
+      LootBoxArtifact.abi,
+      this._provider.getSigner(0)
+    );
+    this._vendor = new ethers.Contract(
+      contractAddress.LootBoxVendor,
+      LootBoxVendorArtifact.abi,
+      this._provider.getSigner(0)
+    );
+    this._lob = new ethers.Contract(
+      contractAddress.LOBToken,
+      LOBToken.abi,
       this._provider.getSigner(0)
     );
   }

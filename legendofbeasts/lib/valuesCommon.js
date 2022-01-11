@@ -5,7 +5,7 @@ const toBNHex = a => a;
 
 // Configfuration for our tokens
 
-const NUM_EGGS = A
+const NUM_EGGS = 3;
 const EGG_HATCHING_DELAY = 60;
 const NUM_ACCESSORIES = 6;
 const MINT_INITIAL_SUPPLY = 1000;
@@ -50,7 +50,6 @@ const LOOTBOX_OPTION_GUARANTEES = [
 
 const USDT_ADDRESS = "0xde3A24028580884448a5397872046a019649b084";
 const FEE_RECEIVER = "0xB03C52C465F0Fb2A7229A70C5a1D79d6c30162B0";
-
 
 module.exports = {
   NUM_EGGS,

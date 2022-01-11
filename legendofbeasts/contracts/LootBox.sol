@@ -3,6 +3,7 @@ pragma solidity ^0.8.2;
 
 import "./utils/LootBoxRandomness.sol";
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -11,11 +12,21 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 contract LootBox is ERC1155, Ownable, Pausable, ERC1155Burnable {
     using LootBoxRandomness for LootBoxRandomness.LootBoxRandomnessState;
     LootBoxRandomness.LootBoxRandomnessState private state;
+    IERC20 private lob;
+    address private feeReceiver;
 
-    constructor() ERC1155("https://api.hbeasts.com/assets/lootbox/{id}.json") {}
+    constructor(address _token)
+        ERC1155("https://api.hbeasts.com/assets/lootbox/{id}.json")
+    {
+        lob = IERC20(_token);
+    }
 
     function setURI(string memory newuri) public onlyOwner {
         _setURI(newuri);
+    }
+
+    function setFeedReceiver(address _feeReceiver) public onlyOwner {
+        feeReceiver = _feeReceiver;
     }
 
     function pause() public onlyOwner {
@@ -35,6 +46,11 @@ contract LootBox is ERC1155, Ownable, Pausable, ERC1155Burnable {
         address _toAddress,
         uint256 _amount
     ) external {
+        require(
+            lob.allowance(_msgSender(), address(this)) >= 1,
+            "Allow more LOB"
+        );
+        lob.transferFrom(_msgSender(), feeReceiver, 1);
         // This will underflow if _msgSender() does not own enough tokens.
         _burn(_msgSender(), _optionId, _amount);
         // Mint nfts contained by LootBox

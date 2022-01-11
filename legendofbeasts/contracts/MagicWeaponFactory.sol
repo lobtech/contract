@@ -5,7 +5,7 @@ import "./MagicWeapon.sol";
 import "./utils/RNG.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract BuildingFactory is Ownable, RNG {
+contract MagicWeaponFactory is Ownable, RNG {
     MagicWeapon private weapon;
     mapping(uint256 => uint256[]) optionTokenIds;
 
