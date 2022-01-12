@@ -39,6 +39,8 @@ const LOOTBOX_OPTIONS = [
 ];
 const NUM_LOOTBOX_OPTIONS = LOOTBOX_OPTIONS.length;
 
+const NUM_WEAPON_OPTIONS = 9;
+
 const NO_SUCH_LOOTBOX_OPTION = toBN(NUM_LOOTBOX_OPTIONS + 10);
 const LOOTBOX_OPTION_AMOUNTS = [toBN(3), toBN(5), toBN(7)];
 // Note that these are token IDs, not option IDs, so they are one higher
@@ -64,6 +66,7 @@ module.exports = {
   CLASS_DIVINE,
   CLASS_HIDDEN,
   NUM_CLASSES,
+  NUM_WEAPON_OPTIONS,
   LOOTBOX_OPTION_BRONZE,
   LOOTBOX_OPTION_SILVER,
   LOOTBOX_OPTION_GOLD,

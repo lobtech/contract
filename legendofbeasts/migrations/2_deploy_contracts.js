@@ -34,14 +34,14 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(LOBTokenFactory, LOBToken.address);
 
   let lobFactory = await LOBTokenFactory.deployed();
-  lobFactory.setSpender(values.FEE_RECEIVER);
+  lobFactory.setSpender(spender);
   lob.approve(lobFactory.address, 1000000000, { from: spender });
 
   await deployer.deploy(Building);
   let building = await Building.deployed();
   await deployer.deploy(BuildingFactory, Building.address);
   let buildingFactory = await BuildingFactory.deployed();
-  await deployer.deploy(MagicWeapon);
+  await deployer.deploy(MagicWeapon, values.NUM_WEAPON_OPTIONS);
   let magicWeapon = await MagicWeapon.deployed();
   await deployer.deploy(MagicWeaponFactory, MagicWeapon.address);
   let magicWeaponFactory = await MagicWeaponFactory.deployed();

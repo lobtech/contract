@@ -7,9 +7,17 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 
 contract MagicWeapon is ERC1155, Ownable, Pausable, ERC1155Burnable {
-    constructor()
+    uint16 private _numOptions;
+
+    constructor(uint16 _num)
         ERC1155("https://api.hbeasts.com/assets/magic_weapons/{id}.json")
-    {}
+    {
+        _numOptions = _num;
+    }
+
+    function numOptions() public view returns (uint16) {
+        return _numOptions;
+    }
 
     function setURI(string memory newuri) public onlyOwner {
         _setURI(newuri);

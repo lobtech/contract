@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
-export function LootBoxVendor({ lob, vendor, lootbox }) {
+export function LootBoxVendor({ lob, vendor, selectedAddress }) {
+    const [error, setError] = useState('');
     async function _buyWithLOB(option) {
-        await lob.approve(vendor.address, 500000000);
+        setError('');
+        let price = await vendor.getFeeToken(option);
+        let balance = await lob.balanceOf(selectedAddress);
+        if (price.gt(balance)) {
+            setError("Insufficient LOB balance");
+        }
+        let allowance = await lob.allowance(vendor.address);
+        if (allowance.lt(price)) {
+            await lob.approve(vendor.address, 500000000);
+        }
         await vendor.buyWithToken(option, 1);
     }
     return (
         <>
-            <h1>Sale: buy one get one free!</h1>
+            <h1>Sale: 50% off everything!</h1>
+            {error != '' && (
+                <div className="alert alert-danger">{error}</div>
+            )}
             <div className="btn-group">
                 <a className="btn btn-primary" onClick={() => _buyWithLOB(0)}>S Box</a>
                 <a className="btn btn-primary" onClick={() => _buyWithLOB(1)}>SS Box</a>

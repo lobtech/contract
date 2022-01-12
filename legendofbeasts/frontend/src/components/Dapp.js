@@ -12,9 +12,12 @@ import EggArtifact from "../contracts/Egg.json";
 import HatchingEggArtifact from "../contracts/HatchingEgg.json";
 import DragonArtifact from "../contracts/Dragon.json";
 
-import LOBToken from "../contracts/LOBToken.json";
+import LOBTokenArtifact from "../contracts/LOBToken.json";
 import LootBoxArtifact from "../contracts/LootBox.json";
 import LootBoxVendorArtifact from "../contracts/LootBoxVendor.json";
+import MagicWeaponArtifact from "../contracts/MagicWeapon.json";
+import BuildingArtifact from "../contracts/Building.json";
+
 
 import contractAddress from "../contract-address.json";
 
@@ -31,6 +34,7 @@ import { Hatching } from "./Hatching";
 import { Dragon } from "./Dragon";
 import { LootBoxVendor } from "./LootBoxVendor";
 import { BoxCollection } from "./BoxCollection";
+import { NFTCollection } from "./NFTCollection";
 
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
@@ -118,13 +122,16 @@ export class Dapp extends React.Component {
           <div className="col-12">
             <ul className="nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link>
+                <Link className="nav-link" to="/">Faucet</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/buy">Buy</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/boxes">Boxes</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/nft">NFT</Link>
               </li>
             </ul>
             {/* 
@@ -204,6 +211,10 @@ export class Dapp extends React.Component {
             <Route path="/boxes">
               <BoxCollection lob={this._lob} lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />
             </Route>
+            <Route path="/nft">
+              <NFTCollection lob={this._lob} building={this._building} magicWeapon={this._magicWeapon} egg={this._egg} selectedAddress={this.state.selectedAddress} />
+            </Route>
+
           </div>
         </div>
       </div>
@@ -311,7 +322,17 @@ export class Dapp extends React.Component {
     );
     this._lob = new ethers.Contract(
       contractAddress.LOBToken,
-      LOBToken.abi,
+      LOBTokenArtifact.abi,
+      this._provider.getSigner(0)
+    );
+    this._magicWeapon = new ethers.Contract(
+      contractAddress.MagicWeapon,
+      MagicWeaponArtifact.abi,
+      this._provider.getSigner(0)
+    );
+    this._building = new ethers.Contract(
+      contractAddress.Building,
+      BuildingArtifact.abi,
       this._provider.getSigner(0)
     );
   }

@@ -37,7 +37,7 @@ export function BoxCollection({ lob, lootbox, selectedAddress }) {
                     {boxTypes.map((t, i) => {
                         return (
                             <tr key={i}>
-                                <td>{t} BOX</td>
+                                <td><span className="badge bg-primary text-light">{t}</span></td>
                                 <td>{balances[i]}</td>
                                 <td><a className="btn btn-success" onClick={() => _openBox(i)}>Open</a></td>
                             </tr>

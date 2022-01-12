@@ -31,14 +31,26 @@ contract LootBoxVendor is Ownable {
         feeEther[_optionId] = _fee;
     }
 
+    function getFeeEther(uint256 _optionId) public view returns (uint256) {
+        return feeEther[_optionId];
+    }
+
     function setFeeUSDT(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeUSDT[_optionId] = _fee;
     }
 
+    function getFeeUSDT(uint256 _optionId) public view returns (uint256) {
+        return feeUSDT[_optionId];
+    }
+
     function setFeeToken(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeToken[_optionId] = _fee;
+    }
+
+    function getFeeToken(uint256 _optionId) public view returns (uint256) {
+        return feeToken[_optionId];
     }
 
     function setFeeReceiver(address payable _receiver) public onlyOwner {

@@ -156,10 +156,10 @@ library LootBoxRandomness {
         require(_optionId < _state.numOptions, "_option out of range");
         uint256 quantityOfRandomized = 1;
         for (uint256 i = 0; i < _amount; i++) {
-            uint256 classId = 0; //_pickRandomClass(
-            //     _state,
-            //     _state.classProbabilities[_optionId]
-            // );
+            uint256 classId = _pickRandomClass(
+                _state,
+                _state.classProbabilities[_optionId]
+            );
             _sendTokenWithClass(
                 _state,
                 classId,
@@ -183,7 +183,7 @@ library LootBoxRandomness {
         uint256 _classId,
         address _toAddress,
         uint256 _amount,
-        address _owner
+        address
     ) internal returns (uint256) {
         require(_classId < _state.numClasses, "_class out of range");
         Factory factory = Factory(_state.classToFactory[_classId]);
