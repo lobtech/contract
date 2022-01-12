@@ -2,7 +2,7 @@ const values = require('./valuesCommon');
 
 const classTokens = [
   [0],
-  [10],
+  [10 * 1000000],
   [0],
   [1],
   [2],
@@ -35,7 +35,8 @@ const TOTAL_SUPPLY = 1000;
 
 // Configure the lootbox
 
-const setupLootBox = async (lootBox, ...factories) => {
+const setupLootBox = async (lootBox, factories) => {
+  await lootBox.setFeeReceiver(values.FEE_RECEIVER);
   await lootBox.setState(
     values.NUM_LOOTBOX_OPTIONS,
     values.NUM_CLASSES,
@@ -50,7 +51,6 @@ const setupLootBox = async (lootBox, ...factories) => {
   for (let i = 0; i < values.NUM_LOOTBOX_OPTIONS; i++) {
     await lootBox.setProbabilitiesForOption(i, classProbabilities[i]);
   }
-  lootBox.setFeeReceiver(values.FEE_RECEIVER);
 };
 
 const setupMagicWeaponFactory = async (factory) => {
@@ -64,6 +64,8 @@ const setupLootboxVendor = async (vendor, feeReceiver) => {
   await vendor.setFeeReceiver(feeReceiver);
   for (let i = 0; i < 5; i++) {
     await vendor.setFeeUSDT(i, lootboxPriceUSDT[i] * 1000000);
+    // TODO remove
+    await vendor.setFeeToken(i, lootboxPriceUSDT[i] * 1000000);
   }
   await vendor.setFeeToken(5, lootboxPriceLOB[0] * 1000000);
   await vendor.setFeeToken(6, lootboxPriceLOB[1] * 1000000);

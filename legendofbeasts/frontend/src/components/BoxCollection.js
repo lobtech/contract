@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export function BoxCollection({ lootbox, selectedAddress }) {
+export function BoxCollection({ lob, lootbox, selectedAddress }) {
     const [balances, setBalances] = useState([0, 0, 0, 0, 0, 0, 0]);
     useEffect(() => {
         async function update() {
@@ -15,18 +15,36 @@ export function BoxCollection({ lootbox, selectedAddress }) {
         }
         update();
     }, [selectedAddress]);
+
+    async function _openBox(option) {
+        await lob.approve(lootbox.address, 1000000);
+        await lootbox.unpack(option, 1);
+    }
+
+    const boxTypes = ["S", "SS", "SSS", "Gold", "Diamond", "Normal", "Normal+"];
     return (
         <>
             <h1>My Collection</h1>
-            <ul>
-                <li>S BOX {balances[0]}</li>
-                <li>SS BOX {balances[1]}</li>
-                <li>SSS BOX {balances[2]}</li>
-                <li>Gold BOX {balances[3]}</li>
-                <li>Diamond BOX {balances[4]}</li>
-                <li>Normal BOX 1 {balances[5]}</li>
-                <li>Normal BOX 2 {balances[6]}</li>
-            </ul>
+            <table className="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <td>Type</td>
+                        <td>Amount</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {boxTypes.map((t, i) => {
+                        return (
+                            <tr key={i}>
+                                <td>{t} BOX</td>
+                                <td>{balances[i]}</td>
+                                <td><a className="btn btn-success" onClick={() => _openBox(i)}>Open</a></td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
         </>
     );
 }

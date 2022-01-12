@@ -156,13 +156,13 @@ library LootBoxRandomness {
         require(_optionId < _state.numOptions, "_option out of range");
         uint256 quantityOfRandomized = 1;
         for (uint256 i = 0; i < _amount; i++) {
-            uint256 class = _pickRandomClass(
-                _state,
-                _state.classProbabilities[_optionId]
-            );
+            uint256 classId = 0; //_pickRandomClass(
+            //     _state,
+            //     _state.classProbabilities[_optionId]
+            // );
             _sendTokenWithClass(
                 _state,
-                class,
+                classId,
                 _toAddress,
                 quantityOfRandomized,
                 _owner

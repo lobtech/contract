@@ -18,19 +18,24 @@ const fs = require("fs");
 const values = require("../lib/valuesCommon");
 const { setupLootboxVendor, setupLootBox, setupMagicWeaponFactory } = require("../lib/setupLootboxes");
 
-module.exports = async (deployer, network) => {
+module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(Dragon);
   await deployer.deploy(HatchingEgg, Dragon.address, values.EGG_HATCHING_DELAY);
   await deployer.deploy(Egg, HatchingEgg.address, values.EGG_HATCHING_DELAY);
   await deployer.deploy(EggFactory, Egg.address, values.NUM_EGGS);
 
+  let spender = accounts[3]; // values.FEE_RECEIVER;
   await deployer.deploy(LOBToken);
   let lob = await LOBToken.deployed();
-  // mint 1b LOB for the LOB distributor
+  // mint 1k LOB for the LOB distributor
+  lob.mint(spender, 1000000000);
   lob.mint(values.FEE_RECEIVER, 1000000000);
   // Factory to distribute LOB from the spender when lootbox is opened
-  await deployer.deploy(LOBTokenFactory, LOBToken.address, values.FEE_RECEIVER);
+  await deployer.deploy(LOBTokenFactory, LOBToken.address);
+
   let lobFactory = await LOBTokenFactory.deployed();
+  lobFactory.setSpender(values.FEE_RECEIVER);
+  lob.approve(lobFactory.address, 1000000000, { from: spender });
 
   await deployer.deploy(Building);
   let building = await Building.deployed();
@@ -46,9 +51,12 @@ module.exports = async (deployer, network) => {
   let lootbox = await LootBox.deployed();
   await deployer.deploy(LootBoxVendor, LOBToken.address, LootBox.address, values.NUM_LOOTBOX_OPTIONS);
   let vendor = await LootBoxVendor.deployed();
-  setupLootBox(lootbox, EggFactory, LOBTokenFactory, MagicWeaponFactory, MagicWeaponFactory, MagicWeaponFactory, BuildingFactory, BuildingFactory, BuildingFactory);
-  setupLootboxVendor(vendor, values.FEE_RECEIVER);
-  setupMagicWeaponFactory(magicWeaponFactory);
+
+  await setupLootBox(lootbox, [EggFactory, LOBTokenFactory, MagicWeaponFactory, MagicWeaponFactory, MagicWeaponFactory, BuildingFactory, BuildingFactory, BuildingFactory]);
+  await setupLootboxVendor(vendor, values.FEE_RECEIVER);
+  await setupMagicWeaponFactory(magicWeaponFactory);
+
+  await lootbox.grantRole(await lootbox.MINTER_ROLE(), vendor.address);
   buildingFactory.transferOwnership(lootbox.address);
   magicWeaponFactory.transferOwnership(lootbox.address);
   lobFactory.transferOwnership(lootbox.address);
@@ -57,6 +65,8 @@ module.exports = async (deployer, network) => {
 
   let egg = await Egg.deployed();
   egg.transferOwnership(EggFactory.address);
+  let eggFactory = await EggFactory.deployed();
+  eggFactory.transferOwnership(lootbox.address);
 
   let hegg = await HatchingEgg.deployed();
   hegg.transferOwnership(egg.address);

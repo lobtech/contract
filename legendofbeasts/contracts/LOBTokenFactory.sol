@@ -8,8 +8,11 @@ contract LOBTokenFactory is Ownable {
     LOBToken private lob;
     address private spender;
 
-    constructor(address _lobAddress, address _spender) {
+    constructor(address _lobAddress) {
         lob = LOBToken(_lobAddress);
+    }
+
+    function setSpender(address _spender) public onlyOwner {
         spender = _spender;
     }
 

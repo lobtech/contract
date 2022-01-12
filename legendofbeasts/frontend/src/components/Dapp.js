@@ -116,15 +116,15 @@ export class Dapp extends React.Component {
       <div className="container p-4">
         <div className="row">
           <div className="col-12">
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
+            <ul className="nav">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">Home</Link>
               </li>
-              <li>
-                <Link to="/buy">Buy</Link>
+              <li className="nav-item">
+                <Link className="nav-link" to="/buy">Buy</Link>
               </li>
-              <li>
-                <Link to="/boxes">Boxes</Link>
+              <li className="nav-item">
+                <Link className="nav-link" to="/boxes">Boxes</Link>
               </li>
             </ul>
             {/* 
@@ -202,7 +202,7 @@ export class Dapp extends React.Component {
               <LootBoxVendor lob={this._lob} lootbox={this._lootbox} vendor={this._vendor} />
             </Route>
             <Route path="/boxes">
-              <BoxCollection lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />
+              <BoxCollection lob={this._lob} lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />
             </Route>
           </div>
         </div>

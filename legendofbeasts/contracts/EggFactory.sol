@@ -5,7 +5,9 @@ import "./interfaces/IERC1155Factory.sol";
 import "./utils/RNG.sol";
 import "./Egg.sol";
 
-contract EggFactory is IERC1155Factory, RNG {
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract EggFactory is IERC1155Factory, RNG, Ownable {
     address private nftAddress;
     uint256 private numOptions;
     uint256 private seed;
@@ -36,6 +38,18 @@ contract EggFactory is IERC1155Factory, RNG {
 
     function balanceOf(address _owner) public view override returns (uint256) {
         return mintedAddresses[_owner];
+    }
+
+    // API for lootbox
+    function mint(
+        uint256, // ignore option Id, generated on spot randomly
+        address _to,
+        uint256 _amount,
+        bytes memory data
+    ) public onlyOwner {
+        uint256 _optionId = _random() % numOptions;
+        Egg egg = Egg(nftAddress);
+        egg.mint(_to, _optionId, _amount, data);
     }
 
     function mintTo(address _to) public override {

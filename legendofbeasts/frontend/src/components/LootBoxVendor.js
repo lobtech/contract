@@ -7,15 +7,15 @@ export function LootBoxVendor({ lob, vendor, lootbox }) {
     return (
         <>
             <h1>Sale: buy one get one free!</h1>
-            <ul>
-                <li><a className="btn" onClick={() => _buyWithLOB(0)}>Buy S Box</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(1)}>Buy SS Box</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(2)}>Buy SSS Box</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(3)}>Buy Gold Box</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(4)}>Buy Diamond Box</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(5)}>Buy Normal Box 1</a></li>
-                <li><a className="btn" onClick={() => _buyWithLOB(6)}>Buy Normal Box 2</a></li>
-            </ul>
+            <div className="btn-group">
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(0)}>S Box</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(1)}>SS Box</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(2)}>SSS Box</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(3)}>Gold Box</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(4)}>Diamond Box</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(5)}>Normal Box 1</a>
+                <a className="btn btn-primary" onClick={() => _buyWithLOB(6)}>Normal Box 2</a>
+            </div>
         </>
     );
 }
