@@ -206,7 +206,7 @@ export class Dapp extends React.Component {
               */}
             </Route>
             <Route path="/buy">
-              <LootBoxVendor lob={this._lob} lootbox={this._lootbox} vendor={this._vendor} />
+              <LootBoxVendor lob={this._lob} lootbox={this._lootbox} vendor={this._vendor} selectedAddress={this.state.selectedAddress} />
             </Route>
             <Route path="/boxes">
               <BoxCollection lob={this._lob} lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />

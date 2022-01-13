@@ -8,7 +8,7 @@ export function LootBoxVendor({ lob, vendor, selectedAddress }) {
         if (price.gt(balance)) {
             setError("Insufficient LOB balance");
         }
-        let allowance = await lob.allowance(vendor.address);
+        let allowance = await lob.allowance(selectedAddress, vendor.address);
         if (allowance.lt(price)) {
             await lob.approve(vendor.address, 500000000);
         }
