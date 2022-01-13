@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
+import "./interfaces/IERC1155Factory.sol";
 import "./LOBToken.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LOBTokenFactory is Ownable {
+contract LOBTokenFactory is Ownable, IERC1155Factory {
     LOBToken private lob;
     address private spender;
 
@@ -21,7 +22,7 @@ contract LOBTokenFactory is Ownable {
         address _to,
         uint256 _amount,
         bytes memory
-    ) public onlyOwner {
+    ) public override onlyOwner {
         lob.transferFrom(spender, _to, _optionId * _amount);
     }
 }

@@ -37,12 +37,6 @@ abstract contract Factory {
         uint256 _amount,
         bytes calldata _data
     ) external virtual;
-
-    function balanceOf(address _owner, uint256 _optionId)
-        public
-        view
-        virtual
-        returns (uint256);
 }
 
 /**

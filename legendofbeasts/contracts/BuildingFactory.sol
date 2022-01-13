@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
+import "./interfaces/IERC1155Factory.sol";
 import "./Building.sol";
 import "./utils/RNG.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract BuildingFactory is Ownable, RNG {
+contract BuildingFactory is Ownable, RNG, IERC1155Factory {
     // using Counters for Counters.Counter;
 
     // address private spender;
@@ -24,7 +25,7 @@ contract BuildingFactory is Ownable, RNG {
         address _to,
         uint256 _amount,
         bytes memory
-    ) public onlyOwner {
+    ) public override onlyOwner {
         require(_amount == 1, "cannot mint more than 1");
         building.safeMintWithOption(_to, _optionId);
         // _tokenIdCounter.increment();

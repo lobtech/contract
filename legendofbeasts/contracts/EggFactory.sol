@@ -30,13 +30,12 @@ contract EggFactory is IERC1155Factory, RNG, Ownable {
     function canMint(uint256 _optionId, address _account)
         public
         view
-        override
         returns (bool)
     {
         return _optionId < numOptions && mintedAddresses[_account] == 0;
     }
 
-    function balanceOf(address _owner) public view override returns (uint256) {
+    function balanceOf(address _owner) public view returns (uint256) {
         return mintedAddresses[_owner];
     }
 
@@ -46,13 +45,13 @@ contract EggFactory is IERC1155Factory, RNG, Ownable {
         address _to,
         uint256 _amount,
         bytes memory data
-    ) public onlyOwner {
+    ) public override onlyOwner {
         uint256 _optionId = _random() % numOptions;
         Egg egg = Egg(nftAddress);
         egg.mint(_to, _optionId, _amount, data);
     }
 
-    function mintTo(address _to) public override {
+    function mintTo(address _to) public {
         uint256 _optionId = _random() % numOptions;
         require(canMint(_optionId, _to), "Already minted or non-exist option");
         mintedAddresses[msg.sender] = 1;
