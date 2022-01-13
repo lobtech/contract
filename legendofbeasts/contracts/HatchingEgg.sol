@@ -74,6 +74,10 @@ contract HatchingEgg is
         uint256 amount,
         bytes memory data
     ) public onlyOwner nonReentrant {
+        require(
+            isReady(_msgSender()),
+            "HatchingEgg: Not ready to hatch a new one"
+        );
         _mint(account, id, amount, data);
         _timestamps[account] = block.timestamp + _delay;
     }

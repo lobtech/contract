@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-export function Hatching({ breakUp, option, timeReady }) {
+export function Hatching({ hegg, option, selectedAddress }) {
+    let breakUp = async (option) => {
+        await hegg.breakUp(option);
+    }
+
     const [dueTime, setDueTime] = useState(new Date());
     const [isReady, setReady] = useState(false);
     useEffect(() => {
         async function update() {
-            let t = await timeReady();
+            let t = await hegg.dueTime(selectedAddress);
             let readyTime = new Date(t.toNumber() * 1000);
             setDueTime(readyTime);
             setReady(readyTime < new Date());

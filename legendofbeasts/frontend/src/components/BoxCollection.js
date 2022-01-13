@@ -17,7 +17,10 @@ export function BoxCollection({ lob, lootbox, selectedAddress }) {
     }, [selectedAddress]);
 
     async function _openBox(option) {
-        await lob.approve(lootbox.address, 1000000);
+        let allowance = await lob.allowance(selectedAddress, lootbox.address);
+        if (allowance < 1000000) {
+            await lob.approve(lootbox.address, 1000000000);
+        }
         await lootbox.unpack(option, 1);
     }
 

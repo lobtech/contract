@@ -170,24 +170,10 @@ export class Dapp extends React.Component {
                     <b>
                       {this.state.balance.gt(0) ? "claimed " : "not claimed "}
                     </b>
-                    your Egg.
+                    your free Egg.
                   </p>
                 </div>
               </div>
-              {/*
-                If the user has no tokens, we don't show the Tranfer form
-              */}
-              {this.state.balance.gt(0) && !this.state.hatching && this.state.option > -1 && (
-                <Incubator startHatching={(option) => this._startHatching(option)} option={this.state.option} getUri={(option) => this._getUri(option)} />
-              )}
-
-              {this.state.hatching && (
-                <Hatching breakUp={(option) => this._breakUp(option)} timeReady={() => this._timeReady()} option={this.state.option} />
-              )}
-
-              {this.state.balance.gt(0) && this.state.option < 0 && (
-                <Dragon getDragonId={() => this._getDragonId()} />
-              )}
               {this.state.balance.eq(0) && (
                 <Faucet
                   transferTokens={(to) =>
@@ -212,9 +198,12 @@ export class Dapp extends React.Component {
               <BoxCollection lob={this._lob} lootbox={this._lootbox} selectedAddress={this.state.selectedAddress} />
             </Route>
             <Route path="/nft">
-              <NFTCollection lob={this._lob} building={this._building} magicWeapon={this._magicWeapon} egg={this._egg} selectedAddress={this.state.selectedAddress} />
+              <NFTCollection lob={this._lob} dragon={this._dragon} building={this._building} magicWeapon={this._magicWeapon} egg={this._egg} selectedAddress={this.state.selectedAddress} />
             </Route>
-
+            <Route path="/incubator">
+              <Incubator egg={this._egg} hegg={this._hegg} startHatching={(option) => this._startHatching(option)}
+                getUri={(option) => this._getUri(option)} selectedAddress={this.state.selectedAddress} />
+            </Route>
           </div>
         </div>
       </div>
@@ -365,11 +354,6 @@ export class Dapp extends React.Component {
     this.setState({ tokenData: { name, symbol } });
   }
 
-  async _timeReady() {
-    let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
-    return dueTime;
-  }
-
   async _updateBalance() {
     const balance = await this._factory.balanceOf(this.state.selectedAddress);
     this.setState({ balance });
@@ -389,13 +373,6 @@ export class Dapp extends React.Component {
         }
       }
     }
-  }
-
-  async _getDragonId() {
-    let balance = await this._dragon.balanceOf(this.state.selectedAddress);
-    if (balance.eq(0)) return -1;
-    let dragonId = await this._dragon.tokenOfOwnerByIndex(this.state.selectedAddress, 0);
-    return dragonId.toNumber();
   }
 
   async _startHatching(option) {
@@ -430,19 +407,6 @@ export class Dapp extends React.Component {
     return -1;
   }
 
-  async _breakUp(option) {
-    let tx = await this._hegg.breakUp(option);
-    this.setState({ txBeingSent: tx.hash });
-    const receipt = await tx.wait();
-
-    // The receipt, contains a status flag, which is 0 to indicate an error.
-    if (receipt.status === 0) {
-      // We can't know the exact error that made the transaction fail when it
-      // was mined, so we throw this generic one.
-      throw new Error("Transaction failed");
-    }
-    this.setState({ txBeingSent: undefined });
-  }
   // This method sends an ethereum transaction to transfer tokens.
   // While this action is specific to this application, it illustrates how to
   // send a transaction.

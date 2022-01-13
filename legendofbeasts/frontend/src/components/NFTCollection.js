@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "wouter";
 
 function sum(bns) {
     return bns.reduce((x, y) => x.add(y)).toNumber();
@@ -14,7 +15,7 @@ function getParams(address, numOptions) {
     return [accounts, ids];
 }
 
-export function NFTCollection({ lob, egg, magicWeapon, building, selectedAddress }) {
+export function NFTCollection({ lob, dragon, egg, magicWeapon, building, selectedAddress }) {
     const [eggBalance, setEggBalance] = useState(0);
     useEffect(() => {
         async function update() {
@@ -24,6 +25,17 @@ export function NFTCollection({ lob, egg, magicWeapon, building, selectedAddress
         }
         update();
     }, [selectedAddress]);
+
+    const [dragonBalance, setDragonBalance] = useState(0);
+    useEffect(() => {
+        async function update() {
+            let _balance = await dragon.balanceOf(selectedAddress);
+            setDragonBalance(_balance.toNumber());
+        }
+        update();
+    }, [selectedAddress]);
+
+
 
     const [weaponBalance, setWeaponBalance] = useState(0);
     useEffect(() => {
@@ -57,7 +69,8 @@ export function NFTCollection({ lob, egg, magicWeapon, building, selectedAddress
         <>
             <h1>NFT collections</h1>
             <ul>
-                <li>Egg: {eggBalance}</li>
+                <li>Egg: {eggBalance} <Link to="/incubator">Incubator</Link></li>
+                <li>Dragon: {dragonBalance}</li>
                 <li>Magic Weapon: {weaponBalance}</li>
                 <li>LOB: {lobBalance}</li>
                 <li>Building: {buildingBalance}</li>
