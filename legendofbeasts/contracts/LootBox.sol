@@ -51,6 +51,7 @@ contract LootBox is ERC1155, ERC1155Burnable, AccessControl {
             lob.allowance(_msgSender(), address(this)) >= 1,
             "Allow more LOB"
         );
+        // 1 LOB to open the box
         lob.transferFrom(_msgSender(), feeReceiver, 1000000); // 6 decimals
         // This will underflow if _msgSender() does not own enough tokens.
         _burn(_msgSender(), _optionId, _amount);

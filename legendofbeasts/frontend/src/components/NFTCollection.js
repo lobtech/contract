@@ -48,7 +48,7 @@ export function NFTCollection({ lob, egg, magicWeapon, building, selectedAddress
     useEffect(() => {
         async function update() {
             let balance = await lob.balanceOf(selectedAddress);
-            setLobBalance(balance.toNumber());
+            setLobBalance(balance.toNumber() / 1000000);
         }
         update();
     }, [selectedAddress]);

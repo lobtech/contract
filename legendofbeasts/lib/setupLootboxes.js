@@ -1,14 +1,23 @@
+const web3 = require('web3');
 const values = require('./valuesCommon');
 
 const classTokens = [
-  [0],
-  [10 * 1000000],
+  [0], // Egg reward, option id is ignored to mint a random egg
+  [10 * 1000000], // LOB reward, optionId as amount
+  // Magic weapon rewards, three categories
   [0],
   [1],
   [2],
+  // Building rewards, three categories
   [0],
   [1],
   [2]
+];
+
+const weaponCategories = [
+  [0, 1, 2], // token ids corresponding to the low level categories
+  [3, 4, 5],
+  [6, 7, 8]
 ];
 
 const classProbabilities = [
@@ -21,13 +30,8 @@ const classProbabilities = [
   [3000, 2000, 1000, 1000, 2000, 1000, 0, 0],
 ];
 
-const weaponCategories = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8]
-];
-
 const lootboxPriceUSDT = [1, 5, 20, 100, 500];
+const lootboxPriceEther = [0.1, 0.5, 2, 10, 20];
 const lootboxPriceLOB = [100, 500];
 
 const WEAPON_OPTIONS = 9;
@@ -63,6 +67,7 @@ const setupLootboxVendor = async (vendor, feeReceiver) => {
   await vendor.setUSDT(values.USDT_ADDRESS);
   await vendor.setFeeReceiver(feeReceiver);
   for (let i = 0; i < 5; i++) {
+    await vendor.setFeeEther(i, web3.utils.toWei(lootboxPriceEther[i].toString()));
     await vendor.setFeeUSDT(i, lootboxPriceUSDT[i] * 1000000);
     // TODO remove
     await vendor.setFeeToken(i, lootboxPriceUSDT[i] * 1000000);
