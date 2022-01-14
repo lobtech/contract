@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MagicWeaponFactory is Ownable, RNG, IERC1155Factory {
     MagicWeapon private weapon;
+    // Association of magic weapon level (option id) to token ids
     mapping(uint256 => uint256[]) optionTokenIds;
 
     constructor(address _nftAddress) {

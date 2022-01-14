@@ -5,8 +5,14 @@ import "./interfaces/IERC1155Factory.sol";
 import "./LOBToken.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ *   @dev LOBTokenFactory doesn't own LOB, it simply transfers LOB from the
+ *        `spender` address to the receiver
+ */
 contract LOBTokenFactory is Ownable, IERC1155Factory {
     LOBToken private lob;
+    
+    // The address to take LOB from
     address private spender;
 
     constructor(address _lobAddress) {

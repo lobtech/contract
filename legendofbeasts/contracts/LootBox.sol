@@ -25,12 +25,7 @@ contract LootBox is ERC1155, ERC1155Burnable, AccessControl {
         _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
     }
 
-    modifier onlyOwner() {
-        require(hasRole(ADMIN_ROLE, msg.sender), "Caller is not owner");
-        _;
-    }
-
-    function setURI(string memory newuri) public onlyOwner {
+    function setURI(string memory newuri) public onlyRole(ADMIN_ROLE) {
         _setURI(newuri);
     }
 

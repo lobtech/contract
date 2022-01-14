@@ -3,10 +3,9 @@ pragma solidity ^0.8.2;
 
 import "./interfaces/IERC1155Factory.sol";
 import "./Building.sol";
-import "./utils/RNG.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract BuildingFactory is Ownable, RNG, IERC1155Factory {
+contract BuildingFactory is Ownable, IERC1155Factory {
     // using Counters for Counters.Counter;
 
     // address private spender;

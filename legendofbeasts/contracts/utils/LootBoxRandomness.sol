@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
   Disclaimer: Adopted from Opensea opensea-creatures repository
 */
 
+// This is simply the IERC1155Factory interface
 abstract contract Factory {
     function mint(
         uint256 _optionId,
@@ -100,9 +101,7 @@ library LootBoxRandomness {
      * making attacks more difficult
      * @param _newSeed The new seed to use for the next transaction
      */
-    function setSeed(LootBoxRandomnessState storage _state, uint256 _newSeed)
-        public
-    {
+    function setSeed(LootBoxRandomnessState storage _state, uint256 _newSeed) public {
         _state.seed = _newSeed;
     }
 
@@ -112,10 +111,6 @@ library LootBoxRandomness {
 
     /**
      * @dev Main minting logic for lootboxes
-     * This is called via safeTransferFrom when CreatureAccessoryLootBox extends
-     * CreatureAccessoryFactory.
-     * NOTE: prices and fees are determined by the sell order on OpenSea.
-     * WARNING: Make sure msg.sender can mint!
      */
     function _mint(
         LootBoxRandomnessState storage _state,
@@ -128,10 +123,12 @@ library LootBoxRandomness {
         require(_optionId < _state.numOptions, "_option out of range");
         uint256 quantityOfRandomized = 1;
         for (uint256 i = 0; i < _amount; i++) {
+            // step 1. pick a class
             uint256 classId = _pickRandomClass(
                 _state,
                 _state.classProbabilities[_optionId]
             );
+            // step 2. invoke mint from the corresponding factory to the class
             _sendTokenWithClass(
                 _state,
                 classId,
@@ -159,6 +156,7 @@ library LootBoxRandomness {
     ) internal returns (uint256) {
         require(_classId < _state.numClasses, "_class out of range");
         Factory factory = Factory(_state.classToFactory[_classId]);
+        // Always take the first token id for now
         uint256 tokenId = _state.classToTokenIds[_classId][0];
         // This may mint, create or transfer. We don't handle that here.
         // We use tokenId as an option ID here.
@@ -166,6 +164,7 @@ library LootBoxRandomness {
         return tokenId;
     }
 
+    // The core of the random picking algorithm, google "weighted random"
     function _pickRandomClass(
         LootBoxRandomnessState storage _state,
         uint16[] memory _classProbabilities

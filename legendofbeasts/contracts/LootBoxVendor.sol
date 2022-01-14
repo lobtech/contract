@@ -10,10 +10,15 @@ contract LootBoxVendor is Ownable {
     IERC20 public usdt;
     IERC20 public token;
     LootBox public lootbox;
+    
+    // Receiver for the ERC20 tokens (USDT, LOB)
     address payable private feeReceiver;
+    
+    // Price per currency
     mapping(uint256 => uint256) feeEther;
     mapping(uint256 => uint256) feeUSDT;
     mapping(uint256 => uint256) feeToken;
+    
     uint256 private numOptions;
 
     constructor(

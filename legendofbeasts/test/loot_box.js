@@ -50,7 +50,7 @@ contract("LootBox", function (accounts) {
     await lootbox.setProbabilitiesForOption(option, [0, 10000, 0, 0, 0, 0, 0, 0]);
     let lobBalance = await lob.balanceOf(userA);
     await lob.approve(lootbox.address, 100000000, { from: userA });
-    await lootbox.unpack(option, 1, { from: userA });
+    await lootbox.unpack(option, 1, { from: userA }); // cost 1 LOB to unpack
     let lobBalanceNew = await lob.balanceOf(userA);
     assert.equal(lobBalanceNew.toNumber() - lobBalance.toNumber(), 9000000, "unpack should gain 10 LOB");
     let balance = await lootbox.balanceOf(userA, option);
