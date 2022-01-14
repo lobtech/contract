@@ -28,7 +28,7 @@ The `HatchingEgg` is time locked, it can only turn into a Dragon after a delay
 
 Ownership is transfer on deployment, there is no other way to direct mint intermediate tokens
 
-Check the [tests](/test) for more details
+Check the [tests](test) for more details
 
 
 ## LootBox
@@ -40,22 +40,22 @@ Ether, USDT and LOB. The price are independently set by the contract owner. In t
 we can bind the token price to USDT price via an oracle.
 Buy request is reverted if the price is not set or set to 0.
 
-`LootBox` delegate the actual minting of assets to Factories, which implements a `IERC1155` style mint [API](/contracts/interfaces/IERC1155Factory.sol)
+`LootBox` delegate the actual minting of assets to Factories, which implements a `IERC1155` style mint [API](contracts/interfaces/IERC1155Factory.sol)
 `mint(uint256 _optionId, address _to, uint256 _amount, bytes memory _data)`
 
 The factories decides if they will mint a random `ERC1155` assets based on the `_optionId` or transfer an `ERC20` token, they can also mint `ERC721` assets.
 
 Sometimes the "level" of `ERC721` assets is decided by from which `ERC1155` token they are minted from, this association can be obtained offline by listening to
-an mint event the `ERC721` [contract](/contracts/interfaces/IERC721MintWithOption.sol) emits,
-   please checkout this [worker](/metaapi/worker.js) for a demonstration.
+an mint event the `ERC721` [contract](contracts/interfaces/IERC721MintWithOption.sol) emits,
+   please checkout this [worker](metaapi/worker.js) for a demonstration.
 
 `LootBox` uses a pseudo random number generator to decide which reward should be given, the probabilities of each "class" can be set via the
-`setProbabilitiesForOption` API, fixtures are located in the [setup script](/lib/setupLootboxes.js), the "seed" number can be updated by the owner
+`setProbabilitiesForOption` API, fixtures are located in the [setup script](lib/setupLootboxes.js), the "seed" number can be updated by the owner
 to increase the difficulty of attacks.
 
 ## Diagrams
 
-![Preview](/docs/diagrams.png)
+![Preview](docs/diagrams.png)
 
 ```mermaid
 graph LR
@@ -101,11 +101,15 @@ LOBToken => LOB通证
 * ERC1155
 
 Egg => 神兽蛋
+
 HatchingEgg => 孵化中的神兽蛋
+
 MagicWeapon => 法器
+
 LootBox => 盲盒
 
 * ERC721
 
 Dragon => 神兽
+
 Building => 房屋
