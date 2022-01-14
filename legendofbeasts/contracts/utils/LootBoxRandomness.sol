@@ -8,28 +8,6 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
   Disclaimer: Adopted from Opensea opensea-creatures repository
 */
 
-/*
-  DESIGN NOTES:
-  - We assume Class 0 is common!
-  - Because this is a library we use a state struct rather than member
-    variables. This struct is passes as the first argument to any functions that
-    need it. This can make some function signatures look strange.
-  - Because this is a library we cannot call owner(). We could include an owner
-    field in the state struct, but this would add maintenance overhead for
-    users of this library who have to make sure they change that field when
-    changing the owner() of the contract that uses this library. We therefore
-    append an _owner parameter to the argument list of functions that need to
-    access owner(), which makes some function signatures (particularly _mint)
-    look weird but is better than hiding a dependency on an easily broken
-    state field.
-  - We also cannot call onlyOwner or whenNotPaused. Users of this library should
-    not expose any of the methods in this library, and should wrap any code that
-    uses methods that set, reset, or open anything in onlyOwner().
-    Code that calls _mint should also be wrapped in nonReentrant() and should
-    ensure perform the equivalent checks to _canMint() in
-    CreatureAccessoryFactory.
- */
-
 abstract contract Factory {
     function mint(
         uint256 _optionId,
