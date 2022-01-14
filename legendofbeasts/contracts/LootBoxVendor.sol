@@ -100,7 +100,7 @@ contract LootBoxVendor is Ownable {
         uint256 _optionId,
         uint256 _amount
     ) private {
-        // allowanced check in transferFrom
+        // allowance check in transferFrom
         _token.transferFrom(_msgSender(), feeReceiver, _totalPrice);
         lootbox.mint(_msgSender(), _optionId, _amount, "0x0");
     }
