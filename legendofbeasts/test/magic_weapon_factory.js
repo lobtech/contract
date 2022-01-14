@@ -26,7 +26,7 @@ contract("MagicWeaponFactory", function (accounts) {
     for (let i = 0; i < 3; i++) {
       await factory.mint(i, userA, 1, "0x0");
       let balance = await weapon.balanceOf(userA, i);
-      assert.equal(balance.toNumber(), 1, "should get a weapon 0");
+      assert.equal(balance.toNumber(), 1, `should get a weapon ${i}`);
     }
   });
 });

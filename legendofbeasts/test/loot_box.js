@@ -58,6 +58,7 @@ contract("LootBox", function (accounts) {
   });
 
   it("is able to unpack into a low level magic weapon", async () => {
+    // force mint low level magic weapon
     await lootbox.setProbabilitiesForOption(option, [0, 0, 10000, 0, 0, 0, 0, 0]);
     await lob.approve(lootbox.address, 100000000, { from: userA });
     await lootbox.unpack(option, 1, { from: userA });
