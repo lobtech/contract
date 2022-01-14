@@ -62,7 +62,7 @@ contract("LootBox", function (accounts) {
     await lob.approve(lootbox.address, 100000000, { from: userA });
     await lootbox.unpack(option, 1, { from: userA });
     let balance = await lootbox.balanceOf(userA, option);
-    // assert.equal(balance.toNumber(), 0, "lootbox failed to unpack");
+    assert.equal(balance.toNumber(), 0, "lootbox failed to unpack");
 
     let lowLevel = [0, 1, 2];
     let batch = await magicWeapon.balanceOfBatch([userA, userA, userA], lowLevel);
@@ -75,7 +75,7 @@ contract("LootBox", function (accounts) {
     await lob.approve(lootbox.address, 100000000, { from: userA });
     await lootbox.unpack(option, 1, { from: userA });
     let balance = await lootbox.balanceOf(userA, option);
-    // assert.equal(balance.toNumber(), 0, "lootbox failed to unpack");
+    assert.equal(balance.toNumber(), 0, "lootbox failed to unpack");
 
     let numBuilding = await building.balanceOf(userA);
     assert.equal(numBuilding.toNumber(), 1, "no building found");

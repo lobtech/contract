@@ -30,8 +30,6 @@ import { Loading } from "./Loading";
 // import { Transfer } from "./Transfer";
 import { Faucet } from "./Faucet";
 import { Incubator } from "./Incubator";
-import { Hatching } from "./Hatching";
-import { Dragon } from "./Dragon";
 import { LootBoxVendor } from "./LootBoxVendor";
 import { BoxCollection } from "./BoxCollection";
 import { NFTCollection } from "./NFTCollection";
@@ -222,7 +220,7 @@ export class Dapp extends React.Component {
 
     // To connect to the user's wallet, we have to run this method.
     // It returns a promise that will resolve to the user's address.
-    const [selectedAddress] = await window.ethereum.enable();
+    const [selectedAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
     // Once we have the address, we can initialize the application.
 

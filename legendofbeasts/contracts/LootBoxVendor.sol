@@ -69,6 +69,9 @@ contract LootBoxVendor is Ownable {
     // Buy lootbox with ether
     function buy(uint256 _optionId, uint256 _amount) public payable {
         require(_optionId < numOptions, "Option not available");
+        uint256 price = feeToken[_optionId];
+        require(price > 0, "Option not available for Ether");
+
         uint256 amountSent = msg.value;
         uint256 amountNeeded = feeEther[_optionId] * _amount;
         require(amountSent >= amountNeeded, "You need to send some ether");
