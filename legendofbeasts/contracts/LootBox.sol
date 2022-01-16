@@ -41,6 +41,10 @@ contract LootBox is ERC1155, ERC1155Burnable, AccessControl {
     // MAIN FUNCTIONS
     //////
 
+    /**
+     * @dev User facing interface, use this function to get a random reward from the loot box
+     *      1 LOB is taken to unpack
+     */
     function unpack(uint256 _optionId, uint256 _amount) external {
         require(
             lob.allowance(_msgSender(), address(this)) >= 1,

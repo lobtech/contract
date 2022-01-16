@@ -9,6 +9,10 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 
+/**
+ * @dev Intermediate form between Egg and Dragon, time locked before it can be exchanged to a Dragon
+ *      The length of time lock is controlled by `_delay` state.
+ */
 contract HatchingEgg is
     ERC1155,
     Ownable,
@@ -31,6 +35,7 @@ contract HatchingEgg is
         _delay = delay;
     }
 
+    /// @notice Set the length of time lock, in seconds
     function setDelay(uint256 delay) public onlyOwner {
         _delay = delay;
     }
@@ -51,6 +56,7 @@ contract HatchingEgg is
         return NUM_OPTIONS;
     }
 
+    /// Exchange an egg for a Dragon
     function breakUp(uint256 _optionId) public nonReentrant {
         require(isReady(_msgSender()), "HatchingEgg: Not ready to breakup");
         _burn(msg.sender, _optionId, 1);

@@ -4,10 +4,15 @@ pragma solidity >0.4.9 <0.9.0;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+/** 
+ * @notice Pseudo random number generator, any contract that need certain level of randomness can inherit
+ *         from this contract
+ */
 abstract contract RNG {
     using SafeMath for uint256;
     uint256 private _seed;
 
+    /// Allow changing the seed to increase difficulty of attacks
     function _setSeed(uint256 seed) internal {
         _seed = seed;
     }

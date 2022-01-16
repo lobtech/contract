@@ -6,6 +6,11 @@ import "./LootBox.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+/**
+ * @dev vendor machine for Loot Boxes
+ * Three currency (token) are supported for purchasing: ETH, USDT, LOB
+ * price per each token are set manually
+ */
 contract LootBoxVendor is Ownable {
     IERC20 public usdt;
     IERC20 public token;
@@ -31,47 +36,55 @@ contract LootBoxVendor is Ownable {
         numOptions = _numOptions;
     }
 
+    /// Set Eth price
     function setFeeEther(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeEther[_optionId] = _fee;
     }
 
+    /// Get Eth price
     function getFeeEther(uint256 _optionId) public view returns (uint256) {
         return feeEther[_optionId];
     }
 
+    /// Set USDT price
     function setFeeUSDT(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeUSDT[_optionId] = _fee;
     }
 
+    /// Get USDT price
     function getFeeUSDT(uint256 _optionId) public view returns (uint256) {
         return feeUSDT[_optionId];
     }
 
+    /// Set LOB price
     function setFeeToken(uint256 _optionId, uint256 _fee) public onlyOwner {
         require(_optionId < numOptions, "Option not available");
         feeToken[_optionId] = _fee;
     }
 
+    /// Get LOB price
     function getFeeToken(uint256 _optionId) public view returns (uint256) {
         return feeToken[_optionId];
     }
 
+    /// Set money receiver, make sure it's a external owned account
     function setFeeReceiver(address payable _receiver) public onlyOwner {
         feeReceiver = _receiver;
     }
 
+    /// Set USDT contract address
     function setUSDT(address _usdt) public onlyOwner {
         usdt = IERC20(_usdt);
     }
 
-    // withdraw ether
+    /// withdraw ether to the feeReceiver
     function withdraw() public onlyOwner {
         feeReceiver.transfer(address(this).balance);
     }
 
-    // Buy lootbox with ether
+    /// @notice Buy lootbox with Eth, fail if price is 0
     function buy(uint256 _optionId, uint256 _amount) public payable {
         require(_optionId < numOptions, "Option not available");
         uint256 price = feeToken[_optionId];
@@ -83,6 +96,7 @@ contract LootBoxVendor is Ownable {
         lootbox.mint(_msgSender(), _optionId, _amount, "0x0");
     }
 
+    /// @notice Buy lootbox with USDT, fail if price is 0
     function buyWithUSDT(uint256 _optionId, uint256 _amount) public {
         require(_optionId < numOptions, "Option not available");
         uint256 price = feeUSDT[_optionId];
@@ -91,6 +105,7 @@ contract LootBoxVendor is Ownable {
         _buyWith(usdt, totalPrice, _optionId, _amount);
     }
 
+    /// @notice Buy lootbox with LOB, fail if price is 0
     function buyWithToken(uint256 _optionId, uint256 _amount) public {
         require(_optionId < numOptions, "Option not available");
         uint256 price = feeToken[_optionId];

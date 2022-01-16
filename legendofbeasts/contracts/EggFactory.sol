@@ -7,6 +7,9 @@ import "./Egg.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ * @dev factory that control minting of Eggs, each address can request one random egg
+ */
 contract EggFactory is IERC1155Factory, RNG, Ownable {
     address private nftAddress;
     uint256 private numOptions;
@@ -51,6 +54,7 @@ contract EggFactory is IERC1155Factory, RNG, Ownable {
         egg.mint(_to, _optionId, _amount, data);
     }
 
+    /// @notice API for faucet
     function mintTo(address _to) public {
         uint256 _optionId = _random() % numOptions;
         require(canMint(_optionId, _to), "Already minted or non-exist option");
