@@ -320,7 +320,7 @@ export class Dapp extends React.Component {
       
       let hatching = option > -1;
       console.log(hatching, option, 'hatching')
-      //表示
+      //表示可以孵化了
       if (hatching) {
         this.setState({ hatching, option });
         let dueTime = await this._hegg.dueTime(this.state.selectedAddress);
